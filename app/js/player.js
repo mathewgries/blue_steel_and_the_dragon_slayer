@@ -26,11 +26,7 @@ class Player {
             frame: 0,
             maxFrames: 10
         };
-
-        this.setAttackPoint({
-            x: this.getPosition().x + this.getDimensions().width / 2 + this.getAttackDirection().x * this.getAttackRange(),
-            y: this.getPosition().y + this.getDimensions().height / 2 + this.getAttackDirection().y * this.getAttackRange()
-        })
+        this.updateAttack(this.getAttackDirection().x, this.getAttackDirection().y)
     }
 
     //*************************************************
@@ -188,13 +184,14 @@ class Player {
 
         // Check if the attack point collides with the enemy's bounding box
         if (
-            this.getAttackPoint().x >= enemy.x &&
-            this.getAttackPoint().x <= enemy.x + enemy.width &&
-            this.getAttackPoint().y >= enemy.y &&
-            this.getAttackPoint().y <= enemy.y + enemy.height
+            this.getAttackPoint().x >= enemy.getPosition().x &&
+            this.getAttackPoint().x <= enemy.getPosition().x + enemy.getDimensions().width &&
+            this.getAttackPoint().y >= enemy.getPosition().y &&
+            this.getAttackPoint().y <= enemy.getPosition().y + enemy.getDimensions().height
         ) {
             // Enemy is within attack range, apply the attack logic here
             enemy.takeDamage(this.getAttackDamage());
+            console.log(`E/H: ${enemy.getHealth()}`)
         }
     }
 
@@ -210,8 +207,8 @@ class Player {
         // Calculate the direction of the knockback effect based on the player's position and the enemy's position
         const centerPlayerX = this.getPosition().x + this.getDimensions().width / 2;
         const centerPlayerY = this.getPosition().y + this.getDimensions().height / 2;
-        const centerEnemyX = enemy.x + enemy.width / 2;
-        const centerEnemyY = enemy.y + enemy.height / 2;
+        const centerEnemyX = enemy.getPosition().x + enemy.getDimensions().width / 2;
+        const centerEnemyY = enemy.getPosition().y + enemy.getDimensions().height / 2;
 
         const deltaX = centerPlayerX - centerEnemyX;
         const deltaY = centerPlayerY - centerEnemyY;

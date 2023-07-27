@@ -92,9 +92,7 @@ function update(timestamp) {
     // updateEnemies();
     for (const enemy of enemies) {
         enemy.updatePosition(deltaTime, ctx, canvas);
-        const enemyBoundingBox = enemy.getBoundingBox();
-
-        if (checkAABBCollision(playerBoundingBox, enemyBoundingBox)) {
+        if (checkAABBCollision( player.getBoundingBox(),  enemy.getBoundingBox())) {
             // Handle collision here (e.g., reduce player health, remove enemy, etc.)
             player.handleCollisionWithEnemy(enemy);
 
@@ -105,8 +103,7 @@ function update(timestamp) {
 
         if (player.getIsAttacking()) {
             player.attackEnemy(enemy, ctx);
-            console.log(`E/H: ${enemy.health}`)
-            if (enemy.health <= 0) {
+            if (enemy.getHealth() <= 0) {
                 const index = enemies.indexOf(enemy);
                 enemies.splice(index, 1);
             }

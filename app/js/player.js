@@ -4,111 +4,75 @@ class Player {
     constructor(x, y, width, height, speed, health, maxHealth, tileSize) {
         this.tileSize = tileSize;
         this.speed = speed;
-        this.position = { x: x, y: y };
-        this.dimensions = { width: width, height: height };
-        this.direction = { x: 0, y: 0 };
-        this.health = { health: health, maxHealth: maxHealth };
+        this.position = { x, y };
+        this.dimensions = { width, height };
+        this.direction = { x: 0, y: 1 };
+        this.health = { health, maxHealth };
         this.attack = {
             isMoving: false,
             isAttacking: false,
-            point: { x: this.x, y: this.y },
+            direction: { x: 0, y: 1 },
+            point: { x, y },
             damage: 1,
             range: tileSize / 2 + tileSize,
-            cooldownTime: 100
+            duration: 100
         };
         this.knockback = {
-            cooldownTime: 500,
-            cooldownActive: false,
             isActive: false,
             direction: { x: 0, y: 0 },
             speed: 5,
             distance: 5,
-            duration: 10,
-            frame: 0
+            duration: 250,
+            frame: 0,
+            maxFrames: 10
         };
+
+        this.setAttackPoint({
+            x: this.getPosition().x + this.getDimensions().width / 2 + this.getAttackDirection().x * this.getAttackRange(),
+            y: this.getPosition().y + this.getDimensions().height / 2 + this.getAttackDirection().y * this.getAttackRange()
+        })
     }
 
     //*************************************************
     // SETTERS AND GETTERS
     //*************************************************
 
-    setPosition({ x, y }) { this.position = { x: x, y: y } }
-
+    setPosition({ x, y }) { this.position = { x, y } }
     getPosition() { return this.position }
-
     getDimensions() { return this.dimensions }
-
     getSpeed() { return this.speed }
-
     setDirection({ x, y }) { this.direction = { x: x, y: y } }
-
     getDirection() { return this.direction }
-
     getHealth() { return this.health }
-
     setCurrentHealth() { }
-
     getCurrentHealth() { return this.health.health }
-
     setMaxHealth() { }
-
     getMaxHealth() { return this.health.maxHealth }
-
     getAttack() { return this.attack }
-
     setIsMoving(bool) { this.attack.isMoving = bool }
-
     getIsMoving() { return this.attack.isMoving }
-
     setIsAttacking(bool) { this.attack.isAttacking = bool }
-
     getIsAttacking() { return this.attack.isAttacking }
-
-    setAttackPoint() {
-        this.attack.point = {
-            x: this.getPosition().x + this.getDimensions().width / 2 + this.getDirection().x * this.getAttackRange(),
-            y: this.getPosition().y + this.getDimensions().height / 2 + this.getDirection().y * this.getAttackRange()
-        }
-    }
-
+    setAttackDirection({ x, y }) { this.attack.direction = { x, y } }
+    getAttackDirection() { return this.attack.direction }
+    setAttackPoint({ x, y }) { this.attack.point = { x, y } }
     getAttackPoint() { return this.attack.point }
-
     setAttackDamage() { }
-
     getAttackDamage() { return this.attack.damage }
-
     setAttackRange() { }
-
     getAttackRange() { return this.attack.range }
-
-    getAttackCooldownTime() { return this.attack.cooldownTime }
-
+    getAttackDuration() { return this.attack.duration }
     getKnockback() { return this.knockback }
-
-    getKnockbackCooldownTime() { return this.knockback.cooldownTime }
-
-    setKnockbackCooldownActive(bool) { this.knockback.cooldownActive = bool }
-
-    getKnockbackCooldownActive() { return this.knockback.cooldownActive }
-
     setKnockbackActive(bool) { this.knockback.isActive = bool }
-
     getKnockbackActive() { return this.knockback.isActive }
-
-    setKnockbackDirection({ x, y }) { this.knockback.direction = { x: x, y: y } }
-
+    setKnockbackDirection({ x, y }) { this.knockback.direction = { x, y } }
     getKnockbackDirection() { return this.knockback.direction }
-
     getKnockbackSpeed() { return this.knockback.speed }
-
     getKnockbackDistance() { return this.knockback.distance }
-
     getKnockbackDuration() { return this.knockback.duration }
-
     setKnockbackFrame(num) { this.knockback.frame = num }
-
     getKnockbackFrame() { return this.knockback.frame }
-
+    getKnockbackMaxFrames() { return this.knockback.maxFrames }
     getBoundingBox() {
         return {
             x: this.getPosition().x,
@@ -122,17 +86,20 @@ class Player {
     // MOVEMENT AND DIRECTION
     //*************************************************
 
-    setMovementDirection(keys, playerMovement) {
-        if (this.getKnockbackActive()) {
-            this.handleKnockbackMovement();
-        } else {
-            this.handleNormalMovement(keys, playerMovement);
+    normalizeDirectionVector(xDirection, yDirection) {
+        let x = xDirection
+        let y = yDirection
+        const length = Math.sqrt(x * x + y * y);
+        if (length !== 0) {
+            x /= length;
+            y /= length;
         }
-        this.setIsMoving(this.getDirection().x !== 0 || this.getDirection().y !== 0);
+        return { x, y }
     }
 
     handleNormalMovement(keys, playerMovement) {
         this.setDirection({ x: 0, y: 0 });
+
         if (keys['w']) {
             this.setDirection({ x: this.getDirection().x, y: this.getDirection().y - 1 });
         }
@@ -145,78 +112,61 @@ class Player {
         if (keys['d']) {
             this.setDirection({ x: this.getDirection().x + 1, y: this.getDirection().y });
         }
-        this.normalizeDirectionVector();
+        const direction = this.normalizeDirectionVector(this.getDirection().x, this.getDirection().y);
+        this.setDirection({ x: direction.x, y: direction.y })
         // Update player position based on direction and speed
         this.setPosition({
             x: this.getPosition().x + this.getDirection().x * playerMovement,
             y: this.getPosition().y + this.getDirection().y * playerMovement,
         });
-    }
 
-    handleKnockbackMovement() {
-        // Calculate the knockback effect based on the knockback direction and distance
-        const knockbackX = this.getKnockbackDirection().x * this.getKnockbackDistance();
-        const knockbackY = this.getKnockbackDirection().y * this.getKnockbackDistance();
-        // Update the player's position incrementally based on knockback effect
-        this.setPosition({
-            x: this.getPosition().x + knockbackX,
-            y: this.getPosition().y + knockbackY,
-        });
-        // Increment the frame counter
-        this.setKnockbackFrame(this.getKnockbackFrame() + 1);
-        if (this.getKnockbackFrame() >= this.getKnockbackDuration()) {
-            // Knockback loop finished
-            this.setKnockbackActive(false);
+        this.setIsMoving(this.getDirection().x !== 0 || this.getDirection().y !== 0);
+        if (this.getIsMoving()) {
+            this.updateAttack(this.getDirection().x, this.getDirection().y)
         }
     }
 
     knockbackLoop() {
-        if (this.getKnockbackFrame() < this.getKnockbackDuration()) {
+        if (this.getKnockbackFrame() < this.getKnockbackMaxFrames()) {
             // Update the player's position incrementally based on knockback direction and speed
             this.setPosition({
                 x: this.getPosition().x + this.getKnockbackDirection().x * this.getKnockbackSpeed(),
                 y: this.getPosition().y + this.getKnockbackDirection().y * this.getKnockbackSpeed(),
             });
+            this.updateAttack(this.getAttackDirection().x, this.getAttackDirection().y)
             // Increment the frame counter
             this.setKnockbackFrame(this.getKnockbackFrame() + 1);
             // Request the next frame
             requestAnimationFrame(this.knockbackLoop.bind(this));
-        } else {
-            // Knockback loop finished
-            this.setKnockbackActive(false);
         }
-    }
-
-    normalizeDirectionVector() {
-        let x = this.getDirection().x
-        let y = this.getDirection().y
-        const length = Math.sqrt(x * x + y * y);
-        if (length !== 0) {
-            x /= length;
-            y /= length;
-        }
-        this.setDirection({ x, y })
     }
 
     startKnockback() {
         if (this.getKnockbackActive()) {
             return;
         }
+
         this.setKnockbackActive(true);
         this.setKnockbackFrame(0);
         this.knockbackLoop();
-    }
 
-    startKnockbackCooldown() {
-        this.setKnockbackCooldownActive(true)
         setTimeout(() => {
-            this.setKnockbackCooldownActive(false)
-        }, this.getKnockbackCooldownTime());
+            this.setKnockbackActive(false);
+        }, this.getKnockbackDuration());
     }
 
     //*************************************************
     // ATTACKING
     //*************************************************
+
+    updateAttack(xDirection, yDirection) {
+        const direction = this.normalizeDirectionVector(xDirection, yDirection)
+        this.setAttackDirection({ x: direction.x, y: direction.y })
+        this.setAttackPoint({
+            x: this.getPosition().x + this.getDimensions().width / 2 + this.getAttackDirection().x * this.getAttackRange(),
+            y: this.getPosition().y + this.getDimensions().height / 2 + this.getAttackDirection().y * this.getAttackRange()
+        })
+    }
 
     startAttack() {
         if (this.getIsAttacking()) {
@@ -225,7 +175,7 @@ class Player {
         this.setIsAttacking(true);
         setTimeout(() => {
             this.setIsAttacking(false);
-        }, this.getAttackCooldownTime());
+        }, this.getAttackDuration());
     }
 
     attackEnemy(enemy, ctx) {
@@ -253,7 +203,7 @@ class Player {
     //*************************************************
 
     handleCollisionWithEnemy(enemy) {
-        if (this.getKnockbackCooldownActive()) {
+        if (this.getKnockbackActive()) {
             return;
         }
 
@@ -273,7 +223,6 @@ class Player {
 
         // Apply the knockback effect to the player
         this.startKnockback();
-        this.startKnockbackCooldown();
         this.takeDamage(enemy.getAttackDamage());
     }
 
@@ -291,13 +240,21 @@ class Player {
 
     updatePlayer(keys, ctx, canvas, deltaTime) {
         const playerMovement = this.getSpeed() * deltaTime;
-        this.setMovementDirection(keys, playerMovement)
-        if (this.getIsMoving()) {
-            this.setAttackPoint();
+        if (!this.getKnockbackActive()) {
+            this.handleNormalMovement(keys, playerMovement)
         }
+
+        if (this.getIsMoving()) {
+            this.setAttackPoint({
+                x: this.getPosition().x + this.getDimensions().width / 2 + this.getDirection().x * this.getAttackRange(),
+                y: this.getPosition().y + this.getDimensions().height / 2 + this.getDirection().y * this.getAttackRange()
+            })
+        }
+
         if (keys['k'] && !this.getIsAttacking()) {
             this.startAttack()
         }
+
         const playerBox = this.getBoundingBox();
         // Handle collision detection
         if (checkCanvasCollision(playerBox, canvas)) {
@@ -306,6 +263,7 @@ class Player {
                 y: Math.max(0, Math.min(this.getPosition().y, canvas.height - this.getDimensions().height))
             })
         }
+
         this.draw(ctx)
     }
 

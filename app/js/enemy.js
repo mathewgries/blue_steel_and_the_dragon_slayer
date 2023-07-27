@@ -21,6 +21,7 @@ class Enemy {
     constructor(x, y, width, height, speedX, speedY, baseSpeed, health, attackDamage) {
         this.x = x;
         this.y = y;
+        this.position = { x, y }
         this.width = width;
         this.height = height;
         this.speedX = speedX;
@@ -78,7 +79,7 @@ class Enemy {
         return this.attackDamage
     }
 
-    takeDamage(amount){
+    takeDamage(amount) {
         this.health -= amount
     }
 

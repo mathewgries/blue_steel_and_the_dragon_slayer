@@ -57,7 +57,6 @@ createEnemy(365, 365, tileSize, tileSize, 0, 50, 50, 1, 1);
 createEnemy(270, 270, tileSize, tileSize, 50, 0, 50, 1, 1);
 createEnemy(175, 175, tileSize, tileSize, 0, 50, 50, 1, 1);
 
-
 // const gridSize = 16; // Number of squares in the grid along one axis
 // const tileSpacing = 16; // Spacing between each square
 

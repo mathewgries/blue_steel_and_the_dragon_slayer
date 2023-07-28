@@ -10,19 +10,16 @@ class Enemy {
     //*************************************************
     // INITIALIZE AND POSITIONING
     //*************************************************
-    constructor(x, y, width, height, speedX, speedY, baseSpeed, health, attackDamage) {
+    constructor({ x, y, width, height, speedX, speedY, baseSpeed, health, attackDamage, fillColor }) {
         this.position = { x, y }
         this.dimensions = { width, height }
         this.speed = { x: speedX, y: speedY }
         this.baseSpeed = baseSpeed
         this.health = health;
         this.attackDamage = attackDamage
-        // this.x = x;
-        // this.y = y;
-        // this.width = width;
-        // this.height = height;
-        // this.speedX = speedX;
-        // this.speedY = speedY;
+        this.fillColor = fillColor
+        this.hasBeenHit = false;
+        this.hasBeenHitDuration = 100;
     }
 
     setPosiition({ x, y }) { this.position = { x, y } }
@@ -33,6 +30,9 @@ class Enemy {
     setHealth(num) { this.health = num }
     getHealth() { return this.health }
     getAttackDamage() { return this.attackDamage }
+    setHasBeenHit(bool) { this.hasBeenHit = bool }
+    getHasBeenHit() { return this.hasBeenHit }
+    getHasBeenHitDuration() { return this.hasBeenHitDuration }
 
     getBoundingBox() {
         // Return the entities bounding box as an object
@@ -76,8 +76,15 @@ class Enemy {
     // HEALTH AND DAMAGE
     //*************************************************
 
-    takeDamage(amount) {
-        this.setHealth(this.getHealth() - amount)
+    takeDamage(damage) {
+        if (!this.getHasBeenHit()) {
+            this.setHealth(this.getHealth() - damage)
+            this.setHasBeenHit(true)
+
+            setTimeout(() => {
+                this.setHasBeenHit(false)
+            }, this.getHasBeenHitDuration())
+        }
     }
 
     //*************************************************
@@ -86,7 +93,7 @@ class Enemy {
 
     updatePosition(deltaTime, ctx, canvas) {
         let shouldChangeDirection = false;
-        if (checkCanvasCollision(this.getBoundingBox(), canvas)) {
+        if (checkCanvasCollision(this, canvas)) {
             // Check for collisions with the canvas boundaries
             shouldChangeDirection = true;
         }
@@ -106,7 +113,7 @@ class Enemy {
     }
 
     draw(ctx) {
-        ctx.fillStyle = 'red';
+        ctx.fillStyle = this.fillColor;
         ctx.fillRect(
             this.getPosition().x,
             this.getPosition().y,
@@ -122,4 +129,30 @@ class Enemy {
 
 **************************************************************************************************/}
 
-export { Enemy };
+
+
+class Zombie extends Enemy {
+    constructor({ x, y, speedX, speedY }) {
+        // Set specific properties for Zombie enemies
+        super({ x, y, width: 48, height: 48, speedX, speedY, baseSpeed: 50, health: 2, attackDamage: 2, fillColor: 'green' });
+    }
+
+    // Override or extend methods as needed for Zombie behavior
+    // For example, implement AI logic to make the Zombie chase the player
+}
+
+class Skeleton extends Enemy {
+    constructor({ x, y, speedX, speedY }) {
+        // Set specific properties for Skeleton enemies
+        super({ x, y, width: 48, height: 48, speedX, speedY, baseSpeed: 50, health: 1, attackDamage: 1, fillColor: 'grey' });
+    }
+
+    // Override or extend methods as needed for Skeleton behavior
+    // For example, implement AI logic for Skeleton to use ranged attacks
+}
+
+export {
+    Enemy,
+    Zombie,
+    Skeleton
+};

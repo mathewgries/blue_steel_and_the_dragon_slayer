@@ -11,6 +11,7 @@ class Player {
         this.attack = {
             isMoving: false,
             isAttacking: false,
+            isKKeyPressed: false,
             direction: { x: 0, y: 1 },
             point: { x, y },
             damage: 1,
@@ -175,13 +176,6 @@ class Player {
     }
 
     attackEnemy(enemy, ctx) {
-        // TESTING
-        ctx.beginPath();
-        ctx.arc(this.getAttackPoint().x, this.getAttackPoint().y, 2, 0, Math.PI * 2);
-        ctx.fillStyle = 'red';
-        ctx.fill();
-        ctx.closePath();
-
         // Check if the attack point collides with the enemy's bounding box
         if (
             this.getAttackPoint().x >= enemy.getPosition().x &&
@@ -191,7 +185,6 @@ class Player {
         ) {
             // Enemy is within attack range, apply the attack logic here
             enemy.takeDamage(this.getAttackDamage());
-            console.log(`E/H: ${enemy.getHealth()}`)
         }
     }
 
@@ -248,13 +241,19 @@ class Player {
             })
         }
 
-        if (keys['k'] && !this.getIsAttacking()) {
-            this.startAttack()
+        if (keys["k"] && !this.getIsAttacking() && !this.isKKeyPressed) {
+            this.startAttack();
+            this.isKKeyPressed = true; // Set the flag to true when "k" is pressed
+        }
+
+        // Check if the "k" key is released and reset the flag
+        if (!keys["k"]) {
+            this.isKKeyPressed = false;
         }
 
         const playerBox = this.getBoundingBox();
         // Handle collision detection
-        if (checkCanvasCollision(playerBox, canvas)) {
+        if (checkCanvasCollision(this, canvas)) {
             this.setPosition({
                 x: Math.max(0, Math.min(this.getPosition().x, canvas.width - this.getDimensions().width)),
                 y: Math.max(0, Math.min(this.getPosition().y, canvas.height - this.getDimensions().height))
@@ -262,6 +261,10 @@ class Player {
         }
 
         this.draw(ctx)
+
+        if (this.getIsAttacking()) {
+            this.drawAttackPoint(ctx)
+        }
     }
 
     draw(ctx) {
@@ -272,7 +275,10 @@ class Player {
             this.getDimensions().width,
             this.getDimensions().height
         );
+    }
 
+    // THESE DRAWS ARE FOR TESTING CURRENTLY
+    drawPlayerDirection(ctx) {
         // TESTING
         // Calculate the center of the player rectangle
         const centerX = this.getPosition().x + this.getDimensions().width / 2;
@@ -280,7 +286,7 @@ class Player {
 
         // Set the color and size of the direction indicator dot
         ctx.fillStyle = 'red';
-        const dotSize = 5;
+        const dotSize = 10;
 
         // CAN PROBABLY USE THIS FOR THE SPRITE
         // Draw the direction indicator dot based on the player's current direction
@@ -297,7 +303,9 @@ class Player {
             // Facing up
             ctx.fillRect(centerX - dotSize / 2, centerY - dotSize, dotSize, dotSize);
         }
+    }
 
+    drawAttackPoint(ctx) {
         ctx.beginPath();
         ctx.arc(this.getAttackPoint().x, this.getAttackPoint().y, 2, 0, Math.PI * 2);
         ctx.fillStyle = 'red';

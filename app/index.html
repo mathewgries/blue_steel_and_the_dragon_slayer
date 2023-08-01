@@ -9,12 +9,30 @@
 </head>
 
 <body>
-    <canvas id="gameCanvas"></canvas>
+    <div id="game-container">
+        <div id="canvas-container">
+            <canvas id="game-canvas"></canvas>
+        </div>
+        <div id="inventory">
+            <div id="weapon-selector">
+                <div class="weapon-slot" id="sling-slot"></div>
+                <div class="weapon-slot" id="sword-slot"></div>
+                <div class="weapon-slot" id="bow-slot"></div>
+                <div class="weapon-slot" id="crossbow-slot"></div>
+                <div class="weapon-slot" id="flail-slot"></div>
+                <div class="weapon-slot" id="axe-slot"></div>
+                <div class="weapon-slot" id="polearm-slot"></div>
+                <div class="weapon-slot" id="mace-slot"></div>
+                <div class="weapon-slot" id="warhammer-slot"></div>
+            </div>
+        </div>
+    </div>
 
-    <script type="module" src="js/collisionDetection.js"></script>
-    <script type="module" src="js/game.js"   defer></script>
-    <script type="module" src="js/player.js" defer></script>
-    <script type="module" src="js/enemy.js"  defer></script>
+
+    <script type="module" src="js/physics/collisionDetection.js"></script>
+    <script type="module" src="js/game/game.js" defer></script>
+    <script type="module" src="js/classes/entities/testPlayer.js" defer></script>
+    <script type="module" src="js/classes/entities/enemy.js" defer></script>
 </body>
 
 </html>

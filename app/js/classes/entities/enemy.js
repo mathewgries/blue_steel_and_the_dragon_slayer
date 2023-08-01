@@ -1,4 +1,4 @@
-import { checkCanvasCollision } from "./collisionDetection.js";
+import { checkCanvasCollision } from "../../physics/collisionDetection.js";
 
 {/************************************************************************************************* 
     

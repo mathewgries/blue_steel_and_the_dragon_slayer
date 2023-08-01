@@ -1,4 +1,7 @@
-import { checkCanvasCollision } from "./collisionDetection.js";
+import { Inventory } from "../inventory/inventory.js";
+import { checkCanvasCollision } from "../../physics/collisionDetection.js";
+
+// import weaponsData from './weaponsData.js'
 
 class Player {
     constructor(x, y, width, height, speed, health, maxHealth, tileSize) {
@@ -11,7 +14,7 @@ class Player {
         this.attack = {
             isMoving: false,
             isAttacking: false,
-            isKKeyPressed: false,
+            isAttackKeyPressed: false,
             direction: { x: 0, y: 1 },
             point: { x, y },
             damage: 1,
@@ -27,11 +30,24 @@ class Player {
             frame: 0,
             maxFrames: 10
         };
+        this.inventory = new Inventory();
+        this.weaponSelector = {
+            arrowKeyDown: false,
+            cycleInterval: null,
+            highlightedWeaponIndex: 0,
+            selectedWeaponIndex: 0,
+
+        };
+
         this.updateAttack(this.getAttackDirection().x, this.getAttackDirection().y)
+        // this.setWeaponsList()
     }
 
     //*************************************************
-    // SETTERS AND GETTERS
+    //          SETTERS AND GETTERS
+    //
+    //*************************************************
+    //          POSITION AND DIRECTION
     //*************************************************
 
     setPosition({ x, y }) { this.position = { x, y } }
@@ -40,16 +56,28 @@ class Player {
     getSpeed() { return this.speed }
     setDirection({ x, y }) { this.direction = { x: x, y: y } }
     getDirection() { return this.direction }
+
+    //*************************************************
+    //                  HEALTH
+    //*************************************************
+
     getHealth() { return this.health }
     setCurrentHealth() { }
     getCurrentHealth() { return this.health.health }
     setMaxHealth() { }
     getMaxHealth() { return this.health.maxHealth }
+
+    //*************************************************
+    //                  ATTACK
+    //*************************************************
+
     getAttack() { return this.attack }
     setIsMoving(bool) { this.attack.isMoving = bool }
     getIsMoving() { return this.attack.isMoving }
     setIsAttacking(bool) { this.attack.isAttacking = bool }
     getIsAttacking() { return this.attack.isAttacking }
+    setIsAttackKeyPressed(bool) { this.attack.isAttackKeyPressed = bool }
+    getIsAttackKeyPressed() { return this.attack.isAttackKeyPressed }
     setAttackDirection({ x, y }) { this.attack.direction = { x, y } }
     getAttackDirection() { return this.attack.direction }
     setAttackPoint({ x, y }) { this.attack.point = { x, y } }
@@ -59,6 +87,11 @@ class Player {
     setAttackRange() { }
     getAttackRange() { return this.attack.range }
     getAttackDuration() { return this.attack.duration }
+
+    //*************************************************
+    //                  KNOCKBACK
+    //*************************************************
+
     getKnockback() { return this.knockback }
     setKnockbackActive(bool) { this.knockback.isActive = bool }
     getKnockbackActive() { return this.knockback.isActive }
@@ -70,6 +103,52 @@ class Player {
     setKnockbackFrame(num) { this.knockback.frame = num }
     getKnockbackFrame() { return this.knockback.frame }
     getKnockbackMaxFrames() { return this.knockback.maxFrames }
+
+    //***********************************************************************
+
+    //                              INVENTORY
+
+    //***********************************************************************
+
+    getInventory() { return this.inventory }
+
+    //***********************************************************************
+
+    //                              WEAPONS
+
+    //***********************************************************************
+
+    // setWeaponsList() {
+    //     let index = 0
+    //     for (const category in weaponsData) {
+    //         const selectedItem = weaponsData[category].find((item) => item.isSelectable);
+    //         const canBeSelected = selectedItem !== undefined;
+    //         this.inventory.weapons[category] = {
+    //             index: index++,
+    //             canBeSelected,
+    //             ...selectedItem
+    //         }
+    //     }
+    // }
+    getWeaponList() { return this.inventory.weapons }
+    setEquippedWeapon(weapon) { this.equippedWeapon = weapon }
+    getEquippedWeapon() { return this.equippedWeapon }
+
+    //***********************************************************************
+
+    //                          WEAPON SELECTOR
+
+    //***********************************************************************
+
+    setArrowKeyDown(bool) { this.weaponSelector.arrowKeyDown = bool }
+    getArrowKeyDown() { return this.weaponSelector.arrowKeyDown }
+    setWeaponCycleInternal() { }
+    getWeaponCycleInterval() { return this.weaponSelector.cycleInterval }
+    setHighlightedWeaponIndex(index) { this.weaponSelector.highlightedWeaponIndex = index }
+    getHighlightedWeaponIndex() { return this.weaponSelector.highlightedWeaponIndex }
+    setSelectedWeaponIndex(index) { this.weaponSelector.selectedWeaponIndex = index }
+    getSelectedWeaponIndex() { return this.weaponSelector.selectedWeaponIndex }
+
     getBoundingBox() {
         return {
             x: this.getPosition().x,
@@ -79,9 +158,43 @@ class Player {
         };
     }
 
-    //*************************************************
-    // MOVEMENT AND DIRECTION
-    //*************************************************
+    //***********************************************************************
+
+    //                              WEAPONS
+
+    //***********************************************************************
+
+    addWeaponToInventory(weapon) {
+        this.inventory.weapons.push(weapon);
+    }
+
+    equipWeapon(weapon) {
+        this.equippedWeapon = weapon
+    }
+
+    checkArrowKeyPress(keys) {
+        const { ArrowLeft, ArrowRight, ArrowUp, ArrowDown } = keys;
+        return ArrowLeft || ArrowRight || ArrowUp || ArrowDown;
+    }
+
+    startWeaponCycling() {
+        // Start the cycling interval
+        this.cycleInterval = setInterval(() => {
+            this.cycleWeaponList();
+        }, 200); // Adjust the delay as needed
+    }
+
+    stopWeaponCycling() {
+        // Stop the cycling interval
+        clearInterval(this.cycleInterval);
+        this.cycleInterval = null;
+    }
+
+    //***********************************************************************
+
+    //                      MOVEMENT AND DIRECTION
+
+    //***********************************************************************
 
     normalizeDirectionVector(xDirection, yDirection) {
         let x = xDirection
@@ -152,9 +265,11 @@ class Player {
         }, this.getKnockbackDuration());
     }
 
-    //*************************************************
-    // ATTACKING
-    //*************************************************
+    //***********************************************************************
+
+    //                             ATTACKING
+
+    //***********************************************************************
 
     updateAttack(xDirection, yDirection) {
         const direction = this.normalizeDirectionVector(xDirection, yDirection)
@@ -188,9 +303,11 @@ class Player {
         }
     }
 
-    //*************************************************
-    // HEALTH AND DAMAGE
-    //*************************************************
+    //***********************************************************************
+
+    //                          HEALTH AND DAMAGE
+
+    //***********************************************************************
 
     handleCollisionWithEnemy(enemy) {
         if (this.getKnockbackActive()) {
@@ -224,9 +341,11 @@ class Player {
         }
     }
 
-    //*************************************************
-    // UPDATE AND DRAW
-    //*************************************************
+    //***********************************************************************
+
+    //                          UPDATE AND DRAW
+
+    //***********************************************************************
 
     updatePlayer(keys, ctx, canvas, deltaTime) {
         const playerMovement = this.getSpeed() * deltaTime;
@@ -234,21 +353,24 @@ class Player {
             this.handleNormalMovement(keys, playerMovement)
         }
 
-        if (this.getIsMoving()) {
-            this.setAttackPoint({
-                x: this.getPosition().x + this.getDimensions().width / 2 + this.getDirection().x * this.getAttackRange(),
-                y: this.getPosition().y + this.getDimensions().height / 2 + this.getDirection().y * this.getAttackRange()
-            })
-        }
-
-        if (keys["k"] && !this.getIsAttacking() && !this.isKKeyPressed) {
+        if (keys["k"] && !this.getIsAttacking() && !this.getIsAttackKeyPressed()) {
             this.startAttack();
-            this.isKKeyPressed = true; // Set the flag to true when "k" is pressed
+            this.setIsAttackKeyPressed(true); // Set the flag to true when "k" is pressed
         }
 
         // Check if the "k" key is released and reset the flag
         if (!keys["k"]) {
-            this.isKKeyPressed = false;
+            this.setIsAttackKeyPressed(false);
+        }
+
+        if (!this.getArrowKeyDown() && this.checkArrowKeyPress()) {
+            this.setArrowKeyDown(true)
+        } else if (this.getArrowKeyDown() && !this.checkArrowKeyPress()) {
+            this.setArrowKeyDown(false)
+        }
+
+        if (this.getArrowKeyDown()) {
+
         }
 
         const playerBox = this.getBoundingBox();
@@ -279,28 +401,18 @@ class Player {
 
     // THESE DRAWS ARE FOR TESTING CURRENTLY
     drawPlayerDirection(ctx) {
-        // TESTING
-        // Calculate the center of the player rectangle
         const centerX = this.getPosition().x + this.getDimensions().width / 2;
         const centerY = this.getPosition().y + this.getDimensions().height / 2;
-
-        // Set the color and size of the direction indicator dot
         ctx.fillStyle = 'red';
         const dotSize = 10;
-
         // CAN PROBABLY USE THIS FOR THE SPRITE
-        // Draw the direction indicator dot based on the player's current direction
-        if (this.getDirection().x > 0) {
-            // Facing right
+        if (this.getDirection().x > 0) { // Facing right
             ctx.fillRect(centerX, centerY - dotSize / 2, dotSize, dotSize);
-        } else if (this.getDirection().x < 0) {
-            // Facing left
+        } else if (this.getDirection().x < 0) { // Facing left
             ctx.fillRect(centerX - dotSize, centerY - dotSize / 2, dotSize, dotSize);
-        } else if (this.getDirection().y > 0) {
-            // Facing down
+        } else if (this.getDirection().y > 0) { // Facing down
             ctx.fillRect(centerX - dotSize / 2, centerY, dotSize, dotSize);
-        } else if (this.getDirection().y < 0) {
-            // Facing up
+        } else if (this.getDirection().y < 0) { // Facing up
             ctx.fillRect(centerX - dotSize / 2, centerY - dotSize, dotSize, dotSize);
         }
     }
@@ -316,7 +428,7 @@ class Player {
 
 {/************************************************************************************************ 
 
-                            EXPORTS
+                                        EXPORTS
 
 **************************************************************************************************/}
 

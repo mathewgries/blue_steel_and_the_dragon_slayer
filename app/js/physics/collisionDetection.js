@@ -9,12 +9,12 @@ function checkAABBCollision(rect1, rect2) {
 }
 
 // Function to check for collision with the canvas edges and return true if there is a collision
-function checkCanvasCollision(entity, canvas) {
+function checkCanvasCollision(boundinBox, canvas) {
     let collision = false;
-    if (entity.getPosition().x < 0 || entity.getPosition().x + entity.getDimensions().width > canvas.width) {
+    if (boundinBox.x < 0 || boundinBox.x + boundinBox.width > canvas.width) {
         collision = true; // Horizontal collision detected
     }
-    if (entity.getPosition().y < 0 || entity.getPosition().y + entity.getDimensions().height > canvas.height) {
+    if (boundinBox.y < 0 || boundinBox.y + boundinBox.height > canvas.height) {
         collision = true; // Vertical collision detected
     }
     return collision;

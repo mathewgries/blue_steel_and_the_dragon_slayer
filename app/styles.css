@@ -4,13 +4,99 @@ body {
     overflow: hidden;
 }
 
-canvas {
+#game-container {
+    display: flex;
+    width: 967px;
+    height: 720px;
+    margin: 0 auto;
+    border: 1px solid black;
+}
+
+#canvas-container {
+    width: 768px;
+    height: 720px;
+}
+
+#game-canvas {
     display: block;
     margin: 0 auto;
     padding: 0;
-    /* width: 768px;
-    height: 768px; */
-    /* height: 720px; */
-    border: 1px solid #000; 
+    width: 768px;
+    height: 720px;
+    border: 1px solid #000;
     aspect-ratio: 256/240;
+}
+
+#inventory {
+    width: 201px;
+    height: 720px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+}
+
+#weapon-selector {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    border: 1px solid whitesmoke;
+    width: 201px;
+    height: 300px;
+}
+
+.weapon-slot {
+    width: 67px;
+    margin: 0;
+    padding: 0;
+    height: 100px;
+}
+
+.weapon-container {
+    width: 57px;
+    height: calc(96px - 10px);
+    margin: 5px auto;
+    text-align: center;
+    border: 2px solid whitesmoke;
+    border-radius: 5px;
+}
+
+.equipped-weapon {
+    background-color: #6A7793;
+}
+
+.weapon-slot .weapon-image-container {
+    width: 57px;
+    height: 55px;
+    margin: 0 auto;
+}
+
+
+.weapon-slot .weapon-image-container img {
+    width: 48px;
+    height: 48px;
+    margin: 3.5px;
+}
+
+.weapon-slot .weapon-name-container {
+    width: 57px;
+    height: 12.5px;
+    font-size: 10px;
+    text-align: center;
+}
+
+.durability-container {
+    width: 57px;
+    height: 15px;
+}
+
+.weapon-slot .durability-meter {
+    width: 50px;
+    height: 13px;
+    margin: 0 auto;
+    border-radius: 2px;
+    border: 2px solid #ccc;
+}
+
+.durability-meter-fill {
+    height: 100%;
 }

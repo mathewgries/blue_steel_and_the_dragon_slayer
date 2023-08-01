@@ -1,13 +1,13 @@
-import { Player } from "./player.js";
-import { Enemy, Zombie, Skeleton } from "./enemy.js";
-import { checkAABBCollision } from "./collisionDetection.js";
+import { Player } from "../classes/entities/testPlayer.js";
+import { Zombie, Skeleton } from "../classes/entities/enemy.js";
+import { checkAABBCollision } from "../physics/collisionDetection.js";
 {/**************************************************************************************************
     
                 SET UP THE CANVAS AND GAME SPEED 
 
 ***************************************************************************************************/}
 // Get the canvas element
-const canvas = document.getElementById('gameCanvas');
+const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
 const scale = 3
 const tile_ratio = 16;
@@ -16,6 +16,8 @@ const width = 256;
 const height = 240;
 canvas.width = width * scale;
 canvas.height = height * scale;
+// Get the Weapon Selector Element
+const weaponSelector = document.getElementById('weapon-selector')
 // Set your desired frame rate (e.g., 30 FPS)
 const targetFPS = 60;
 // Initialize lastTimestamp with the current timestamp
@@ -27,6 +29,7 @@ let deltaTime = 0;
 
 ***************************************************************************************************/}
 const player = new Player(canvas.width / 2, canvas.height / 2, tileSize, tileSize, 100, 60, 6, tileSize)
+const inventory = player.inventory;
 {/**************************************************************************************************
     
                         SET UP THE ENEMIES
@@ -43,11 +46,11 @@ function createSkeleton(x, y, speedX, speedY) {
     const enemy = new Skeleton({ x, y, speedX, speedY })
     enemies.push(enemy);
 }
-createZombie(100, 100, 50, 0, 50);
-createZombie(450, 550, 50, 0, 50);
-createSkeleton(250, 250, 50, 0, 50);
-createSkeleton(150, 150, 50, 0, 50);
-createSkeleton(550, 150, 50, 0, 50);
+// createZombie(100, 100, 50, 0, 50);
+// createZombie(450, 550, 50, 0, 50);
+// createSkeleton(250, 250, 50, 0, 50);
+// createSkeleton(150, 150, 50, 0, 50);
+// createSkeleton(550, 150, 50, 0, 50);
 {/************************************************************************************************** 
     
                         RUNNING THE GAME
@@ -64,22 +67,22 @@ function update(timestamp) {
 
     // Update player and get new position
     player.updatePlayer(keys, ctx, canvas, deltaTime);
-    const playerBoundingBox = player.getBoundingBox();
+    inventory.update(keys, deltaTime)
 
     // updateEnemies();
-    for (const enemy of enemies) {
-        enemy.updatePosition(deltaTime, ctx, canvas);
-        if (checkAABBCollision(player.getBoundingBox(), enemy.getBoundingBox())) {
-            player.handleCollisionWithEnemy(enemy);
-        }
-        if (player.getIsAttacking()) {
-            player.attackEnemy(enemy, ctx);
-            if (enemy.getHealth() <= 0) {
-                const index = enemies.indexOf(enemy);
-                enemies.splice(index, 1);
-            }
-        }
-    }
+    // for (const enemy of enemies) {
+    //     enemy.updatePosition(deltaTime, ctx, canvas);
+    //     if (checkAABBCollision(player.getBoundingBox(), enemy.getBoundingBox())) {
+    //         player.handleCollisionWithEnemy(enemy);
+    //     }
+    //     if (player.getIsAttacking()) {
+    //         player.attackEnemy(enemy, ctx);
+    //         if (enemy.getHealth() <= 0) {
+    //             const index = enemies.indexOf(enemy);
+    //             enemies.splice(index, 1);
+    //         }
+    //     }
+    // }
 
     // Request the next animation frame with a controlled frame rate
     setTimeout(() => {

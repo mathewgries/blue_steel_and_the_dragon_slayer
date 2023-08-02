@@ -1,5 +1,6 @@
 import { Player } from "../classes/entities/testPlayer.js";
 import { Zombie, Skeleton } from "../classes/entities/enemy.js";
+import { entityData } from "../../data/entityData.js";
 import { checkAABBCollision } from "../physics/collisionDetection.js";
 {/**************************************************************************************************
     
@@ -28,7 +29,7 @@ let deltaTime = 0;
                         SET UP THE PLAYER
 
 ***************************************************************************************************/}
-const player = new Player(canvas.width / 2, canvas.height / 2, tileSize, tileSize, 100, 60, 6, tileSize)
+const player = new Player({ ...entityData.player, xPosition: canvas.width / 2, yPosition: canvas.height / 2, ctx })
 const inventory = player.inventory;
 {/**************************************************************************************************
     
@@ -38,15 +39,15 @@ const inventory = player.inventory;
 // Create an array to store enemies
 const enemies = [];
 // Function to create a new enemy and add it to the enemies array
-function createZombie(x, y, speedX, speedY) {
-    const enemy = new Zombie({ x, y, speedX, speedY })
+function createZombie() {
+    const enemy = new Zombie({ ...entityData.zombie, ctx })
     enemies.push(enemy);
 }
 function createSkeleton(x, y, speedX, speedY) {
     const enemy = new Skeleton({ x, y, speedX, speedY })
     enemies.push(enemy);
 }
-// createZombie(100, 100, 50, 0, 50);
+createZombie();
 // createZombie(450, 550, 50, 0, 50);
 // createSkeleton(250, 250, 50, 0, 50);
 // createSkeleton(150, 150, 50, 0, 50);
@@ -66,23 +67,22 @@ function update(timestamp) {
     drawGrid(ctx, canvas.width, canvas.height, tileSize)
 
     // Update player and get new position
-    player.updatePlayer(keys, ctx, canvas, deltaTime);
+    player.update(keys, deltaTime, canvas);
     inventory.update(keys, deltaTime)
 
-    // updateEnemies();
-    // for (const enemy of enemies) {
-    //     enemy.updatePosition(deltaTime, ctx, canvas);
-    //     if (checkAABBCollision(player.getBoundingBox(), enemy.getBoundingBox())) {
-    //         player.handleCollisionWithEnemy(enemy);
-    //     }
-    //     if (player.getIsAttacking()) {
-    //         player.attackEnemy(enemy, ctx);
-    //         if (enemy.getHealth() <= 0) {
-    //             const index = enemies.indexOf(enemy);
-    //             enemies.splice(index, 1);
-    //         }
-    //     }
-    // }
+    for (const enemy of enemies) {
+        enemy.update(deltaTime, ctx, canvas);
+        if (checkAABBCollision(player.bounds, enemy.bounds)) {
+            player.takeDamage(enemy);
+        }
+        // if (player.getIsAttacking()) {
+        //     player.attackEnemy(enemy);
+        //     if (enemy.getHealth() <= 0) {
+        //         const index = enemies.indexOf(enemy);
+        //         enemies.splice(index, 1);
+        //     }
+        // }
+    }
 
     // Request the next animation frame with a controlled frame rate
     setTimeout(() => {

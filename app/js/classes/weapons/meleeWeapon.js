@@ -5,6 +5,14 @@ class MeleeWeapon extends Weapon {
         super(name, icon, attackDamage, durability, maxDurability, staminaCost)
         this.reach = reach;
     }
+
+    attack() {
+        super.attack()
+    }
+
+    update() {
+
+    }
 }
 
 class Sword extends MeleeWeapon {

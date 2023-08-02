@@ -1,89 +1,46 @@
+import { Entity } from "./entity.js";
 import { checkCanvasCollision } from "../../physics/collisionDetection.js";
 
-{/************************************************************************************************* 
-    
-                        ENEMY CLASS
-
-**************************************************************************************************/}
-
-class Enemy {
+class Enemy extends Entity {
     //*************************************************
     // INITIALIZE AND POSITIONING
     //*************************************************
-    constructor({ x, y, width, height, speedX, speedY, baseSpeed, health, attackDamage, fillColor }) {
-        this.position = { x, y }
-        this.dimensions = { width, height }
-        this.speed = { x: speedX, y: speedY }
-        this.baseSpeed = baseSpeed
-        this.health = health;
-        this.attackDamage = attackDamage
+    constructor({ xPosition, yPosition, width, height, xSpeed, ySpeed, speed, health, attackDamage, ctx, fillColor }) {
+        super({ xPosition, yPosition, width, height, xSpeed, ySpeed, speed, health, attackDamage, ctx })
         this.fillColor = fillColor
         this.hasBeenHit = false;
         this.hasBeenHitDuration = 100;
     }
 
-    setPosiition({ x, y }) { this.position = { x, y } }
-    getPosition() { return this.position }
-    getDimensions() { return this.dimensions }
-    setSpeed({ x, y }) { this.speed = { x, y } }
-    getSpeed() { return this.speed }
-    setHealth(num) { this.health = num }
-    getHealth() { return this.health }
-    getAttackDamage() { return this.attackDamage }
     setHasBeenHit(bool) { this.hasBeenHit = bool }
     getHasBeenHit() { return this.hasBeenHit }
     getHasBeenHitDuration() { return this.hasBeenHitDuration }
 
-    getBoundingBox() {
-        // Return the entities bounding box as an object
-        return {
-            x: this.getPosition().x,
-            y: this.getPosition().y,
-            width: this.getDimensions().width,
-            height: this.getDimensions().height,
-        };
-    }
-
     // Function to calculate the next position without applying it directly
     calculateNextPosition(deltaTime) {
-        const nextX = this.getPosition().x + this.getSpeed().x * deltaTime;
-        const nextY = this.getPosition().y + this.getSpeed().y * deltaTime;
+        const nextX = this.position.x + this.speed.x * deltaTime;
+        const nextY = this.position.y + this.speed.y * deltaTime;
         return { nextX, nextY };
     }
 
     changeDirection(canvas) {
         let randomDirection = Math.random() < 0.5 ? 1 : -1;
-        const isMovingHorizontal = this.getSpeed().y === 0 ? true : false
-        const atTopEdge = this.getPosition().y <= 0;
-        const atBottomEdge = this.getPosition().y + this.getDimensions().height >= canvas.height;
-        const atLeftEdge = this.getPosition().x <= 0;
-        const atRightEdge = this.getPosition().x + this.getDimensions().width >= canvas.width;
+        const isMovingHorizontal = this.speed.y === 0 ? true : false
+        const atTopEdge = this.position.y <= 0;
+        const atBottomEdge = this.position.y + this.dimensions.height >= canvas.height;
+        const atLeftEdge = this.position.x <= 0;
+        const atRightEdge = this.position.x + this.dimensions.width >= canvas.width;
 
         if (isMovingHorizontal) {
             if (randomDirection < 0 && atTopEdge || randomDirection > 0 && atBottomEdge) {
                 randomDirection *= -1
             }
-            this.setSpeed({ x: 0, y: randomDirection * this.baseSpeed })
+            this.speed = { x: 0, y: randomDirection * this.baseSpeed }
         } else {
             if (randomDirection < 0 && atLeftEdge || randomDirection > 0 && atRightEdge) {
                 randomDirection *= -1
             }
-            this.setSpeed({ x: randomDirection * this.baseSpeed, y: 0 })
-        }
-    }
-
-    //*************************************************
-    // HEALTH AND DAMAGE
-    //*************************************************
-
-    takeDamage(damage) {
-        if (!this.getHasBeenHit()) {
-            this.setHealth(this.getHealth() - damage)
-            this.setHasBeenHit(true)
-
-            setTimeout(() => {
-                this.setHasBeenHit(false)
-            }, this.getHasBeenHitDuration())
+            this.speed = { x: randomDirection * this.baseSpeed, y: 0 }
         }
     }
 
@@ -91,9 +48,9 @@ class Enemy {
     // UPDATE AND DRAW
     //*************************************************
 
-    updatePosition(deltaTime, ctx, canvas) {
+    update(deltaTime, ctx, canvas) {
         let shouldChangeDirection = false;
-        if (checkCanvasCollision(this, canvas)) {
+        if (checkCanvasCollision(this.bounds, canvas)) {
             // Check for collisions with the canvas boundaries
             shouldChangeDirection = true;
         }
@@ -108,17 +65,17 @@ class Enemy {
         // Calculate the next position based on the updated speed
         const { nextX, nextY } = this.calculateNextPosition(deltaTime);
         // Apply the movement
-        this.setPosiition({ x: nextX, y: nextY })
+        this.position = { x: nextX, y: nextY }
         this.draw(ctx)
     }
 
     draw(ctx) {
         ctx.fillStyle = this.fillColor;
         ctx.fillRect(
-            this.getPosition().x,
-            this.getPosition().y,
-            this.getDimensions().width,
-            this.getDimensions().height
+            this.position.x,
+            this.position.y,
+            this.dimensions.width,
+            this.dimensions.height
         );
     }
 }
@@ -132,9 +89,8 @@ class Enemy {
 
 
 class Zombie extends Enemy {
-    constructor({ x, y, speedX, speedY }) {
-        // Set specific properties for Zombie enemies
-        super({ x, y, width: 48, height: 48, speedX, speedY, baseSpeed: 50, health: 2, attackDamage: 2, fillColor: 'green' });
+    constructor({ xPosition, yPosition, width, height, xSpeed, ySpeed, speed, health, ctx, attackDamage, fillColor }) {
+        super({ xPosition, yPosition, width, height, xSpeed, ySpeed, speed, health, ctx, attackDamage, fillColor })
     }
 
     // Override or extend methods as needed for Zombie behavior

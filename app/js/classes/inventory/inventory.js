@@ -3,9 +3,9 @@ import { Sling, Bow, Crossbow } from '../weapons/rangedWeapon.js'
 import weaponsData from '../../../data/weaponsData.js'
 
 class Inventory {
-    constructor() {
+    constructor(ctx) {
         this.weapons = {
-            sling: new Sling(weaponsData.sling)
+            sling: new Sling({ ...weaponsData.sling, ctx })
         };
         this.bombs = {
             amount: 0,
@@ -14,7 +14,7 @@ class Inventory {
         }
         this.potions = { health: 0, stamina: 0, strength: 0 };
         this.materials = { wood: 0, iron: 0, stone: 0, steel: 0, copper: 0, carbon: 0 };
-        this.equippedWeapon = null;
+        this.equippedWeapon = {};
         this.equippedSecondary = null;
         this.equippedPotion = null;
 
@@ -26,7 +26,7 @@ class Inventory {
         const weapon = this.weapons[weaponType];
         if (weapon) {
             this.equippedWeapon = weapon;
-            console.log(`Equipped ${weaponType}`)
+            console.log("Equipped: ", this.equippedWeapon)
         } else {
             console.log(`You don't have a ${weaponType} to equip.`)
         }
@@ -81,7 +81,7 @@ class Inventory {
         weaponContainer.appendChild(weaponNameContainer);
     }
 
-    updateDurabilityMeterContainer(weapon, weaponContainer) {
+    updateDurabilityMeter(weapon, weaponContainer) {
         const durabilityContainer = document.createElement("div");
         durabilityContainer.classList.add("durability-container");
         const durabilityMeter = document.createElement("div");
@@ -90,12 +90,12 @@ class Inventory {
         const durabilityMeterFill = document.createElement("div");
         durabilityMeterFill.classList.add("durability-meter-fill")
         durabilityMeter.appendChild(durabilityMeterFill);
-        const meterBarWidth  = 50;
+        const meterBarWidth = 50;
         const durabilityPercentage = ((weapon.durability / weapon.maxDurability) * meterBarWidth);
         durabilityMeterFill.style.width = `${durabilityPercentage}px`;
-        if (durabilityPercentage <= (meterBarWidth/4)) {
+        if (durabilityPercentage <= (meterBarWidth / 4)) {
             durabilityMeterFill.style.backgroundColor = "red";
-        } else if (durabilityPercentage <= (meterBarWidth/2)) {
+        } else if (durabilityPercentage <= (meterBarWidth / 2)) {
             durabilityMeterFill.style.backgroundColor = "orange";
         } else {
             durabilityMeterFill.style.backgroundColor = "green";

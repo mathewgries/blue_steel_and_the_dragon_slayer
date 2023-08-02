@@ -1,20 +1,20 @@
 // Function to check for collision between two rectangular objects (AABB collision)
-function checkAABBCollision(rect1, rect2) {
+function checkAABBCollision(bounds1, bounds2) {
     return (
-        rect1.x < rect2.x + rect2.width &&
-        rect1.x + rect1.width > rect2.x &&
-        rect1.y < rect2.y + rect2.height &&
-        rect1.y + rect1.height > rect2.y
+        bounds1.left < bounds2.right &&
+        bounds1.right > bounds2.left &&
+        bounds1.top < bounds2.bottom &&
+        bounds1.bottom > bounds2.top
     );
 }
 
 // Function to check for collision with the canvas edges and return true if there is a collision
-function checkCanvasCollision(boundinBox, canvas) {
+function checkCanvasCollision(bounds, canvas) {
     let collision = false;
-    if (boundinBox.x < 0 || boundinBox.x + boundinBox.width > canvas.width) {
+    if (bounds.left < 0 || bounds.right > canvas.width) {
         collision = true; // Horizontal collision detected
     }
-    if (boundinBox.y < 0 || boundinBox.y + boundinBox.height > canvas.height) {
+    if (bounds.top < 0 || bounds.bottom > canvas.height) {
         collision = true; // Vertical collision detected
     }
     return collision;

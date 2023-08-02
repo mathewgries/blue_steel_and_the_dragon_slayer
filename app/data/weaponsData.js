@@ -5,11 +5,15 @@ const weaponsData = {
         icon: "sling-icon.png",
         attackDamage: 1,
         durability: 100,
-        maxDurability: 100, 
+        maxDurability: 100,
         staminaCost: 2,
-        distance: 150,
-        projectileSpeed: 8,
-        projectileType: "stone",
+        speed: 100,
+        projectile: {
+            icon: '',
+            distance: 150,
+            speed: 8,
+            type: "stone",
+        }
     },
     sword: [
         {

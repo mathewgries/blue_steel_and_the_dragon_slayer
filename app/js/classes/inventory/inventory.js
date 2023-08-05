@@ -4,8 +4,9 @@ import weaponsData from '../../../data/weaponsData.js'
 
 class Inventory {
     constructor(ctx) {
-        this.weapons = {
-            sling: new Sling({ ...weaponsData.sling, ctx })
+        this.inventoryWeapons = {
+            sling: new Sling({ ...weaponsData.sling, ctx }),
+            sword: new Sword({...weaponsData.wooden_sword, ctx})
         };
         this.bombs = {
             amount: 0,
@@ -21,6 +22,10 @@ class Inventory {
         this.equipWeapon('sling')
         this.updateWeaponSelectorUI()
     }
+
+    // #region Setters and Getters
+    get weapons(){return this.inventoryWeapons}
+    
 
     equipWeapon(weaponType) {
         const weapon = this.weapons[weaponType];

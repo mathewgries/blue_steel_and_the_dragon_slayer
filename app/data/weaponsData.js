@@ -5,8 +5,7 @@ const weaponsData = {
         icon: "sling-icon.png",
         attackDamage: 1,
         durability: 100,
-        maxDurability: 100,
-        staminaCost: 2,
+        staminaCost: 1,
         speed: 100,
         projectile: {
             icon: '',
@@ -14,6 +13,13 @@ const weaponsData = {
             speed: 8,
             type: "stone",
         }
+    },
+    wooden_sword: {
+        name: "Wooden Sword",
+        icon: "wooden-sword-icon.png",
+        attackDamage: 1,
+        durability: 100,
+        staminaCost: 2,
     },
     sword: [
         {

@@ -1,4 +1,4 @@
-import { Entity } from "./entity.js";
+import Entity from "./entity.js";
 import { checkCanvasCollision } from "../../physics/collisionDetection.js";
 
 class Enemy extends Entity {
@@ -8,13 +8,13 @@ class Enemy extends Entity {
     constructor({ xPosition, yPosition, width, height, xSpeed, ySpeed, speed, health, attackDamage, ctx, fillColor }) {
         super({ xPosition, yPosition, width, height, xSpeed, ySpeed, speed, health, attackDamage, ctx })
         this.fillColor = fillColor
-        this.hasBeenHit = false;
-        this.hasBeenHitDuration = 100;
+        this.enemyHasBeenHit = false;
+        this.enemyHasBeenHitDuration = 100;
     }
 
-    setHasBeenHit(bool) { this.hasBeenHit = bool }
-    getHasBeenHit() { return this.hasBeenHit }
-    getHasBeenHitDuration() { return this.hasBeenHitDuration }
+    get hasBeenHit() { return this.enemyHasBeenHit }
+    set hasBeenHit(bool) { this.enemyHasBeenHit = true }
+    get hasBeenHitDuration() { return this.enemyHasBeenHitDuration }
 
     // Function to calculate the next position without applying it directly
     calculateNextPosition(deltaTime) {

@@ -1,8 +1,8 @@
 // constructor({ xPosition, yPosition, width, height, xSpeed, ySpeed, health, tileSize, ctx })
 export const entityData = {
     player: {
-        width: 48,
-        height: 48,
+        width: 16,
+        height: 16,
         xSpeed: 100,
         ySpeed: 100,
         speed: 100,
@@ -12,8 +12,8 @@ export const entityData = {
     zombie: {
         xPosition: 20,
         yPosition: 20,
-        width: 48,
-        height: 48,
+        width: 16,
+        height: 16,
         xSpeed: 50,
         ySpeed: 0,
         speed: 50,

@@ -1,0 +1,5 @@
+class WeaponSelector {
+    constructor(){
+        
+    }
+}

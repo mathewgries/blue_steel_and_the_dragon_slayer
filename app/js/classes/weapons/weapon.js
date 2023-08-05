@@ -1,25 +1,81 @@
 class Weapon {
-    constructor({ name, icon, attackDamage, staminaCost, durability, maxDurability, ctx }) {
-        this.ctx = ctx;
-        this.name = name;
-        this.icon = icon;
-        this.attackDamage = attackDamage;
-        this.staminaCost = staminaCost;
-        this.durability = durability;
-        this.maxDurability = maxDurability;
-        this.lastAttack = {
-            timeStamp: 0,
-            get time() { return this.timeStamp },
-            set time(value) { this.timeStamp = value }
-        }
-        this.attackRate = 1000;
-        this.isBoken = false;
-        this.attack = {
-            startAttackPosition: { x: 0, y: 0 },
-            get startPosition() { return { x: this.startAttackPosition.x, y: this.startPosition.y } },
-            set startPosition({ x, y }) { this.startAttackPosition.x = x; this.startAttackPosition.y = y }
-        }
+    // #region Constructor
+    constructor({ name, icon, attackDamage, staminaCost, durability, ctx }) {
+        this.weaponCtx = ctx;
+        this.weaponName = name;
+        this.wepaonIcon = icon;
+        this.weaponAttackDamage = attackDamage;
+        this.weaponStaminaCost = staminaCost;
+        this.weaponDurability = durability;
+        this.weaponMaxDurability = durability;
+        this.weaponLastAttack = 0;
+        this.weaponAttackRate = 1000;
+        this.weaponIsBoken = false;
+        this.weaponAttackStartPoint = { x: 0, y: 0 }
     }
+
+    // #endregion
+
+    // #region Setters and Getters
+
+    get ctx() { 
+        return this.weaponCtx 
+    }
+
+    get name() { 
+        return this.weaponName 
+    }
+
+    get icon() { 
+        return this.wepaonIcon 
+    }
+
+    get attackDamage() { 
+        return this.weaponAttackDamage 
+    }
+
+    get staminaCost() { 
+        return this.weaponStaminaCost 
+    }
+
+    get durability() { 
+        return this.weaponDurability 
+    }
+
+    get maxDurability() { 
+        return this.weaponMaxDurability 
+    }
+
+    get lastAttack() { 
+        return this.weaponLastAttack 
+    }
+
+    set lastAttack(date) { 
+        this.weaponLastAttack = date 
+    }
+
+    get attackRate() { 
+        return this.weaponAttackRate 
+    }
+
+    get isBoken() { 
+        return this.weaponIsBoken 
+    }
+
+    set isBoken(bool) { 
+        this.weaponIsBoken = bool 
+    }
+
+    get attackStartPoint() { 
+        return this.weaponAttackStartPoint 
+    }
+
+    set attackStartPoint({ x, y }) {
+        this.weaponAttackStartPoint.x = x;
+        this.weaponAttackStartPoint.y = y;
+    }
+
+    // #endregion
 
     isAttackReady() {
         return Date.now() - this.lastAttack.time > this.attackRate;

@@ -1,5 +1,5 @@
 export default class Game {
-    constructor({userInterface, canvas, player, keys }) {
+    constructor({ userInterface, canvas, player, keys }) {
         this.userInterface = userInterface;
         this.canvas = canvas;
         this.player = player;

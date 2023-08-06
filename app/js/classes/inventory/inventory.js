@@ -1,6 +1,6 @@
 import { Sword, Flail, Axe, Polearm, Mace, Warmhammer } from '../weapons/meleeWeapon.js'
 import { Sling, Bow, Crossbow } from '../weapons/rangedWeapon.js'
-import weaponsData from '../../../data/weaponsData.js'
+import weaponsData from '../../../data/weaponsData-old.js'
 
 class Inventory {
     constructor(ctx) {

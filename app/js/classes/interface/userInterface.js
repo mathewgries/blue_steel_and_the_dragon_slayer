@@ -3,19 +3,27 @@ export default class UserInterface {
         this.gameContainer = gameContainer;
         this.canvas = canvas;
         this.hudContainer = hudContainer;
-        this.dimensions = { viewWidth, viewHeight }
+        this.dimensions = { viewWidth, viewHeight };
         this.viewWidth = viewWidth;
         this.viewHeight = viewHeight;
+        this.resize({ viewWidth, viewHeight });
+    }
+
+    resize({ viewWidth, viewHeight }) {
+        this.dimensions = { viewWidth, viewHeight };
+        this.gameContainer.resize({ ...this.dimensions });
+        this.canvas.resize({ ...this.gameContainer.dimensions });
+        this.hudContainer.resize({
+            ...this.gameContainer.dimensions,
+            diff: this.gameContainer.dimensions.width - this.canvas.dimensions.width
+        });
     }
 
     update() {
         const viewWidth = window.innerWidth;
         const viewHeight = window.innerHeight;
         if (this.dimensions.viewWidth !== viewWidth || this.dimensions.viewHeight !== viewHeight) {
-            this.dimensions = { viewWidth, viewHeight }
-            this.gameContainer.update({ ...this.dimensions });
-            this.canvas.update({ ...this.gameContainer.dimensions })
-            this.hudContainer.update({ ...this.gameContainer.dimensions });
+            this.resize({ viewWidth, viewHeight });
         }
     }
 }

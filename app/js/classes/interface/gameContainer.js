@@ -7,13 +7,12 @@ export default class GameContainer {
         this.dimensions = {
             width: 370 + (this.innerBorder * 3),
             height: 240 + (this.innerBorder * 2),
-        }
+        };
         this.aspectRatio = this.dimensions.width / this.dimensions.height;
         this.container.style.width = `${this.dimensions.width}px`;
         this.container.style.height = `${this.dimensions.height}px`;
         this.container.style.display = "flex";
         this.container.style.margin = '';
-        this.resize({ viewWidth, viewHeight })
     }
 
     resize({ viewWidth, viewHeight }) {
@@ -25,8 +24,8 @@ export default class GameContainer {
         let width = viewWidth - (viewWidth * (this.aspectRatio / 100));
         let height = (width / this.aspectRatio) - (this.borderSize * 2) + (this.innerBorder * 2);
         if (height + (this.borderSize * 2) > viewHeight) {
-            height = viewHeight - (this.borderSize * 2)
-            width = (viewHeight * this.aspectRatio) - (this.borderSize * 2)
+            height = viewHeight - (this.borderSize * 2);
+            width = (viewHeight * this.aspectRatio) - (this.borderSize * 2);
         } else {
             width -= (this.borderSize * 2);
         }
@@ -40,6 +39,6 @@ export default class GameContainer {
     }
 
     update({ viewWidth, viewHeight }) {
-        this.resize({ viewWidth, viewHeight })
+
     }
 }

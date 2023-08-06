@@ -21,11 +21,10 @@ export default class Canvas {
         this.gridColumns = 16;
         this.cellSize = this.dimensions.width / this.gridColumns
         this.scale = this.dimensions.width / this.cellSize / this.gridColumns
-        this.resize(height);
-        this.drawGrid();
     }
 
-    resize(height) {
+    resize({ width, height }) {
+        this.clear();
         this.dimensions = {
             width: (height * this.aspectRatio) - 3,
             height: height - (this.borderSize * 2)
@@ -37,6 +36,7 @@ export default class Canvas {
         this.canvas.width = this.dimensions.width;
         this.canvas.height = this.dimensions.height;
         this.setScale()
+        this.drawGrid();
     }
 
     setScale() {
@@ -51,7 +51,6 @@ export default class Canvas {
 
     update({ width, height }) {
         this.clear();
-        this.resize(height);
         this.drawGrid();
     }
 

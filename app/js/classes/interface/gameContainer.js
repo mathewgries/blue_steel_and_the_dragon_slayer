@@ -3,20 +3,17 @@ export default class GameContainer {
         this.container = document.getElementById('game-container');
         this.borderSize = 15;
         this.innerBorder = 2;
-        this.container.style.border = `${this.borderSize}px solid lightgrey`;
         this.dimensions = {
             width: 370 + (this.innerBorder * 3),
             height: 240 + (this.innerBorder * 2),
         };
         this.aspectRatio = this.dimensions.width / this.dimensions.height;
-        this.container.style.width = `${this.dimensions.width}px`;
-        this.container.style.height = `${this.dimensions.height}px`;
-        this.container.style.display = "flex";
-        this.container.style.margin = '';
+
     }
 
     resize({ viewWidth, viewHeight }) {
         this.setDimensions({ viewWidth, viewHeight });
+        this.resizeContainer();
         this.setMargins(viewHeight);
     }
 
@@ -29,7 +26,10 @@ export default class GameContainer {
         } else {
             width -= (this.borderSize * 2);
         }
-        this.dimensions = { width, height };
+        this.dimensions = { width: Math.floor(width), height: Math.floor(height) };
+    }
+
+    resizeContainer() {
         this.container.style.width = `${this.dimensions.width}px`;
         this.container.style.height = `${this.dimensions.height}px`;
     }

@@ -1,22 +1,28 @@
 import { checkCanvasCollision } from "../../physics/collisionDetection.js";
 
 export default class Entity {
-
-    // #region Constructor
-    constructor({ xPosition, yPosition, width, height, xSpeed, ySpeed, speed, health, attackDamage, canvas }) {
+    constructor({ xPosition, yPosition, baseWidth, baseHeight, xSpeed, ySpeed, speed, health, attackDamage, canvas }) {
         this.canvas = canvas;
+        this.ctx = this.canvas.ctx;
+        this.baseDimensions = { width: baseWidth, height: baseHeight }
+        this.baseSpeed = speed;
         this.position = { x: xPosition, y: yPosition };
         this.speed = { x: xSpeed, y: ySpeed };
-        this.baseSpeed = speed;
         this.direction = { x: 0, y: 1 };
-        this.dimensions = { width, height };
+        this.dimensions = { width: baseWidth, height: baseHeight };
         this.attackDamage = attackDamage;
         this.health = health || null;
         this.maxHealth = health || null;
+        this.knockback = {
+            isActive: false,
+            direction: { x: 0, y: 0 },
+            speed: 3,
+            duration: 120,
+            frame: 0,
+            maxFrames: 5,
+        };
     }
-    // #endregion
 
-    // #region Movement and Direction
     normalizeDirectionVector(xDirection, yDirection) {
         let x = xDirection
         let y = yDirection
@@ -36,14 +42,57 @@ export default class Entity {
             bottom: this.position.y + this.dimensions.height,
         }
     }
-    // #endregion
 
-    // #region Attack and Damage
-    takeDamage(entity) {
-        this.health = this.health - entity.attackDamage
+    knockbackLoop() {
+        if (this.knockback.frame < this.knockback.maxFrames) {
+            this.position = {
+                x: this.position.x + this.knockback.direction.x * this.knockback.speed,
+                y: this.position.y + this.knockback.direction.y * this.knockback.speed,
+            };
+            this.knockback.frame = this.knockback.frame + 1;
+            requestAnimationFrame(this.knockbackLoop.bind(this));
+        }
     }
 
-    // #endregion
+    startKnockback() {
+        if (this.knockback.isActive) {
+            return;
+        }
+        this.knockback.isActive = true;
+        this.knockback.frame = 0;
+        this.knockbackLoop();
+        setTimeout(() => {
+            this.knockback.isActive = false;
+        }, this.knockback.duration)
+    }
 
-    update() { }
+    handleCollisionWithEntity(entity) {
+        if (this.knockback.isActive) { return; }
+        const thisX = this.position.x + this.dimensions.width / 2;
+        const thisY = this.position.y + this.dimensions.height / 2;
+        const entityX = entity.position.x + entity.dimensions.width / 2;
+        const entityY = entity.position.y + entity.dimensions.height / 2;
+        const deltaX = thisX - entityX;
+        const deltaY = thisY - entityY;
+
+        this.knockback.direction = this.normalizeDirectionVector(deltaX, deltaY)
+        this.startKnockback();
+    }
+
+    takeDamage(entity) {
+        this.health = this.health - entity.attackDamage
+        this.handleCollisionWithEntity(entity)
+        if (this.health <= 0) {
+            // Handle player defeated
+        }
+    }
+
+    update() {
+        if (checkCanvasCollision(this.bounds, this.canvas)) {
+            this.position = {
+                x: Math.max(0, Math.min(this.position.x, this.canvas.baseDimensions.width - this.dimensions.width)),
+                y: Math.max(0, Math.min(this.position.y, this.canvas.baseDimensions.height - this.dimensions.height))
+            }
+        }
+    }
 }

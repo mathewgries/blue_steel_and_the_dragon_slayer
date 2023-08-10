@@ -2,34 +2,26 @@ import Entity from "./entity.js";
 import { checkCanvasCollision } from "../../physics/collisionDetection.js";
 
 class Enemy extends Entity {
-    //*************************************************
-    // INITIALIZE AND POSITIONING
-    //*************************************************
-    constructor({ xPosition, yPosition, width, height, xSpeed, ySpeed, speed, health, attackDamage, ctx, fillColor }) {
-        super({ xPosition, yPosition, width, height, xSpeed, ySpeed, speed, health, attackDamage, ctx })
+    constructor({ xPosition, yPosition, baseWidth, baseHeight, xSpeed, ySpeed, speed, health, attackDamage, canvas, fillColor }) {
+        super({ xPosition, yPosition, baseWidth, baseHeight, xSpeed, ySpeed, speed, health, attackDamage, canvas })
         this.fillColor = fillColor
-        this.enemyHasBeenHit = false;
-        this.enemyHasBeenHitDuration = 100;
+        this.hasBeenHit = false;
+        this.hasBeenHitDuration = 300;
     }
 
-    get hasBeenHit() { return this.enemyHasBeenHit }
-    set hasBeenHit(bool) { this.enemyHasBeenHit = true }
-    get hasBeenHitDuration() { return this.enemyHasBeenHitDuration }
-
-    // Function to calculate the next position without applying it directly
     calculateNextPosition(deltaTime) {
         const nextX = this.position.x + this.speed.x * deltaTime;
         const nextY = this.position.y + this.speed.y * deltaTime;
         return { nextX, nextY };
     }
 
-    changeDirection(canvas) {
+    changeDirection() {
         let randomDirection = Math.random() < 0.5 ? 1 : -1;
         const isMovingHorizontal = this.speed.y === 0 ? true : false
         const atTopEdge = this.position.y <= 0;
-        const atBottomEdge = this.position.y + this.dimensions.height >= canvas.height;
+        const atBottomEdge = this.position.y + this.dimensions.height >= this.canvas.baseDimensions.height;
         const atLeftEdge = this.position.x <= 0;
-        const atRightEdge = this.position.x + this.dimensions.width >= canvas.width;
+        const atRightEdge = this.position.x + this.dimensions.width >= this.canvas.baseDimensions.width;
 
         if (isMovingHorizontal) {
             if (randomDirection < 0 && atTopEdge || randomDirection > 0 && atBottomEdge) {
@@ -44,34 +36,38 @@ class Enemy extends Entity {
         }
     }
 
+    shouldChangeDirection(deltaTime) {
+        let shouldChangeDirection = false;
+        if (checkCanvasCollision(this.bounds, this.canvas)) {
+            shouldChangeDirection = true;
+        }
+        if (Math.random() < 0.03) {
+            shouldChangeDirection = true;
+        }
+        if (shouldChangeDirection) {
+            this.changeDirection(this.canvas);
+        }
+        const { nextX, nextY } = this.calculateNextPosition(deltaTime);
+        this.position = { x: nextX, y: nextY }
+    }
+
     //*************************************************
     // UPDATE AND DRAW
     //*************************************************
 
-    update(deltaTime, ctx, canvas) {
-        let shouldChangeDirection = false;
-        if (checkCanvasCollision(this.bounds, canvas)) {
-            // Check for collisions with the canvas boundaries
-            shouldChangeDirection = true;
+    update(deltaTime) {
+        if (!this.knockback.isActive) {
+            this.shouldChangeDirection(deltaTime)
+        } else {
+            super.update()
         }
-        if (Math.random() < 0.03) {
-            // Randomly change the direction
-            shouldChangeDirection = true;
-        }
-        if (shouldChangeDirection) {
-            // If there's a collision or random direction change, update the direction
-            this.changeDirection(canvas);
-        }
-        // Calculate the next position based on the updated speed
-        const { nextX, nextY } = this.calculateNextPosition(deltaTime);
-        // Apply the movement
-        this.position = { x: nextX, y: nextY }
-        this.draw(ctx)
+
+        this.draw()
     }
 
-    draw(ctx) {
-        ctx.fillStyle = this.fillColor;
-        ctx.fillRect(
+    draw() {
+        this.ctx.fillStyle = this.fillColor;
+        this.ctx.fillRect(
             this.position.x,
             this.position.y,
             this.dimensions.width,
@@ -82,33 +78,20 @@ class Enemy extends Entity {
 
 {/************************************************************************************************* 
     
-                        EXPORTS
+                        ENEMIES
 
 **************************************************************************************************/}
 
-
-
 class Zombie extends Enemy {
-    constructor({ xPosition, yPosition, width, height, xSpeed, ySpeed, speed, health, ctx, attackDamage, fillColor }) {
-        super({ xPosition, yPosition, width, height, xSpeed, ySpeed, speed, health, ctx, attackDamage, fillColor })
+    constructor({ xPosition, yPosition, baseWidth, baseHeight, xSpeed, ySpeed, speed, health, canvas, attackDamage, fillColor }) {
+        super({ xPosition, yPosition, baseWidth, baseHeight, xSpeed, ySpeed, speed, health, canvas, attackDamage, fillColor })
     }
-
-    // Override or extend methods as needed for Zombie behavior
-    // For example, implement AI logic to make the Zombie chase the player
 }
 
 class Skeleton extends Enemy {
-    constructor({ x, y, speedX, speedY }) {
-        // Set specific properties for Skeleton enemies
-        super({ x, y, width: 48, height: 48, speedX, speedY, baseSpeed: 50, health: 1, attackDamage: 1, fillColor: 'grey' });
+    constructor({ xPosition, yPosition, baseWidth, baseHeight, xSpeed, ySpeed, speed, health, canvas, attackDamage, fillColor }) {
+        super({ xPosition, yPosition, baseWidth, baseHeight, xSpeed, ySpeed, speed, health, canvas, attackDamage, fillColor })
     }
-
-    // Override or extend methods as needed for Skeleton behavior
-    // For example, implement AI logic for Skeleton to use ranged attacks
 }
 
-export {
-    Enemy,
-    Zombie,
-    Skeleton
-};
+export { Enemy, Zombie, Skeleton };

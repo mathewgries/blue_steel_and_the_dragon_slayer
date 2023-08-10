@@ -19,11 +19,5 @@ export default class UserInterface {
         });
     }
 
-    update() {
-        const viewWidth = window.innerWidth;
-        const viewHeight = window.innerHeight;
-        if (this.dimensions.viewWidth !== viewWidth || this.dimensions.viewHeight !== viewHeight) {
-            this.resize({ viewWidth, viewHeight });
-        }
-    }
+    update() { }
 }

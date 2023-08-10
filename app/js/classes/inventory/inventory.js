@@ -1,13 +1,13 @@
 import { Sword, Flail, Axe, Polearm, Mace, Warmhammer } from '../weapons/meleeWeapon.js'
 import { Sling, Bow, Crossbow } from '../weapons/rangedWeapon.js'
-import weaponsData from '../../../data/weaponsData-old.js'
+import { weaponData } from '../../../data/weaponData.js'
+import { addWeaponToUI, updateActiveWeaponUI } from './updateUI.js';
 
-class Inventory {
-    constructor(ctx) {
-        this.inventoryWeapons = {
-            sling: new Sling({ ...weaponsData.sling, ctx }),
-            sword: new Sword({...weaponsData.wooden_sword, ctx})
-        };
+export default class Inventory {
+    constructor({ canvas }) {
+        this.canvas = canvas
+        this.ctx = this.canvas.ctx;
+        this.weapons = {};
         this.bombs = {
             amount: 0,
             get count() { return this.amount },
@@ -19,98 +19,29 @@ class Inventory {
         this.equippedSecondary = null;
         this.equippedPotion = null;
 
+        this.addWeapon({ type: 'sling', name: 'sling' })
         this.equipWeapon('sling')
-        this.updateWeaponSelectorUI()
     }
 
-    // #region Setters and Getters
-    get weapons(){return this.inventoryWeapons}
-    
-
-    equipWeapon(weaponType) {
-        const weapon = this.weapons[weaponType];
-        if (weapon) {
-            this.equippedWeapon = weapon;
-            console.log("Equipped: ", this.equippedWeapon)
-        } else {
-            console.log(`You don't have a ${weaponType} to equip.`)
+    equipWeapon(weaponName) {
+        const newWeapon = this.weapons[weaponName];
+        if (newWeapon) {
+            updateActiveWeaponUI(this.equippedWeapon.type, newWeapon.type)
+            this.equippedWeapon = newWeapon;
         }
     }
 
-    updateWeaponSelectorUI() {
-        const weaponSlotsArray = this.getWeaponSlots()
-
-        weaponSlotsArray.forEach((weaponSlot) => {
-            weaponSlot.innerHTML = "";
-            const weaponName = weaponSlot.id.replace("-slot", "")
-            const weapon = this.weapons[weaponName]
-            const weaponContainer = document.createElement("div")
-            weaponContainer.classList.add("weapon-container")
-
-            if (weapon) {
-                this.updateCollectedWeaponSlot(weapon, weaponContainer)
-                if (weapon === this.equippedWeapon) {
-                    weaponContainer.classList.add('equipped-weapon')
-                }
-            }
-            weaponSlot.appendChild(weaponContainer);
-        })
+    addWeapon({ type, name }) {
+        const weapon = weaponData[type].find((x) => x.name);
+        this.weapons[name] = this.initalizeWeapon(weapon)
+        addWeaponToUI(weapon)
     }
 
-    getWeaponSlots() {
-        const weaponSelector = document.getElementById('weapon-selector')
-        const weaponSlots = weaponSelector.getElementsByClassName('weapon-slot');
-        return Array.from(weaponSlots);
-    }
-
-    updateCollectedWeaponSlot(weapon, weaponContainer) {
-        this.updateWeaponSlotImage(weapon, weaponContainer)
-        this.updateWeaponSlotName(weapon, weaponContainer)
-        this.updateDurabilityMeter(weapon, weaponContainer)
-    }
-
-    updateWeaponSlotImage(weapon, weaponContainer) {
-        const weaponImageContainer = document.createElement("div");
-        weaponImageContainer.classList.add("weapon-image-container");
-        const img = document.createElement("img");
-        img.src = `../assets/images/weapons/${weapon.icon}`;
-        img.alt = `${weapon.name} Icon`;
-        weaponImageContainer.appendChild(img);
-        weaponContainer.appendChild(weaponImageContainer);
-    }
-
-    updateWeaponSlotName(weapon, weaponContainer) {
-        const weaponNameContainer = document.createElement("div");
-        weaponNameContainer.classList.add("weapon-name-container");
-        weaponNameContainer.textContent = weapon.name;
-        weaponContainer.appendChild(weaponNameContainer);
-    }
-
-    updateDurabilityMeter(weapon, weaponContainer) {
-        const durabilityContainer = document.createElement("div");
-        durabilityContainer.classList.add("durability-container");
-        const durabilityMeter = document.createElement("div");
-        durabilityMeter.classList.add("durability-meter");
-        durabilityContainer.appendChild(durabilityMeter);
-        const durabilityMeterFill = document.createElement("div");
-        durabilityMeterFill.classList.add("durability-meter-fill")
-        durabilityMeter.appendChild(durabilityMeterFill);
-        const meterBarWidth = 50;
-        const durabilityPercentage = ((weapon.durability / weapon.maxDurability) * meterBarWidth);
-        durabilityMeterFill.style.width = `${durabilityPercentage}px`;
-        if (durabilityPercentage <= (meterBarWidth / 4)) {
-            durabilityMeterFill.style.backgroundColor = "red";
-        } else if (durabilityPercentage <= (meterBarWidth / 2)) {
-            durabilityMeterFill.style.backgroundColor = "orange";
-        } else {
-            durabilityMeterFill.style.backgroundColor = "green";
+    initalizeWeapon(weapon) {
+        if (weapon.name === 'sling') {
+            return new Sling({ ...weapon, canvas: this.canvas })
         }
-        weaponContainer.appendChild(durabilityContainer);
     }
 
-    update(keys, deltaTime) {
-
-    }
+    update(keys, deltaTime) { }
 }
-
-export { Inventory }

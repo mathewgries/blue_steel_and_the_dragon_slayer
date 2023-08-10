@@ -4,15 +4,17 @@ import UserInterface from "../classes/interface/UserInterface.js";
 import GameContainer from "../classes/interface/GameContainer.js"
 import Canvas from "../classes/interface/canvas.js";
 import HudContainer from "../classes/interface/hudContainer/hudContainer.js";
-import Player from "../classes/entities/testPlayer.js";
+import Player from "../classes/entities/player.js";
+import Inventory from "../classes/inventory/inventory.js";
 import { entityData } from "../../data/entityData.js";
 // #endregion
 
 // #region Userinterface classes
-const viewWidth = window.innerWidth;
-const viewHeight = window.innerHeight;
+let viewWidth = window.innerWidth;
+let viewHeight = window.innerHeight;
 const gameContainer = new GameContainer({ viewWidth, viewHeight });
 const canvas = new Canvas({ ...gameContainer.dimensions });
+
 const hudContainer = new HudContainer({
     ...gameContainer.dimensions,
     diff: gameContainer.dimensions.width - canvas.dimensions.width
@@ -28,12 +30,26 @@ const userInterface = new UserInterface({
 
 // #region Initialize core class elements
 const keys = {};
-const player = new Player({ ...entityData.player, xPosition: 150, yPosition: 150, canvas })
+const inventory = new Inventory({canvas})
+const player = new Player({
+    ...entityData.player,
+    xPosition: canvas.baseDimensions.width / 2,
+    yPosition: canvas.baseDimensions.height / 2,
+    inventory,
+    canvas
+})
 const game = new Game({ userInterface, canvas, player, keys });
 // #endregion
 
 // #region Run the game
 const update = () => {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    if (viewWidth !== vw || viewHeight !== vh) {
+        let viewWidth = vw;
+        let viewHeight = vh;
+        game.resize({ viewWidth, viewHeight });
+    }
     game.update();
     game.render();
     requestAnimationFrame(update);

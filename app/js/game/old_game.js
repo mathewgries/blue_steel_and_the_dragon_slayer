@@ -91,7 +91,7 @@ function update(timestamp) {
 }
 
 // Start the game loop
-requestAnimationFrame(update);
+// requestAnimationFrame(update);
 {/************************************************************************************************** 
     
                         KEY BINDINGS

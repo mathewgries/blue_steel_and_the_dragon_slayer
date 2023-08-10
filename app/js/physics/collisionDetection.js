@@ -11,10 +11,10 @@ function checkAABBCollision(bounds1, bounds2) {
 // Function to check for collision with the canvas edges and return true if there is a collision
 function checkCanvasCollision(bounds, canvas) {
     let collision = false;
-    if (bounds.left < 0 || bounds.right > canvas.width) {
+    if (bounds.left < 0 || bounds.right > canvas.baseDimensions.width) {
         collision = true; // Horizontal collision detected
     }
-    if (bounds.top < 0 || bounds.bottom > canvas.height) {
+    if (bounds.top < 0 || bounds.bottom > canvas.baseDimensions.height) {
         collision = true; // Vertical collision detected
     }
     return collision;

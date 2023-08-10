@@ -1,22 +1,22 @@
 export const potionData = {
     "health": {
         name: 'health-potion',
-        icon: 'health-potion.png',
+        icon: 'health-soda.png',
         label: "Health",
     },
     "damage": {
         name: 'damage-potion',
-        icon: 'damage-potion.png',
+        icon: 'damage-soda.png',
         label: 'Damage',
     },
     "defense": {
         name: 'defense-potion',
-        icon: 'defense-potion.png',
+        icon: 'defense-soda.png',
         label: 'Defense',
     },
     "stamina": {
         name: 'stamina-potion',
-        icon: 'stamina-potion.png',
+        icon: 'stamina-soda.png',
         label: 'Stamina',
     }
 }

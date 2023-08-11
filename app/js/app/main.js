@@ -10,6 +10,7 @@ import { entityData } from "../../data/entityData.js";
 // #endregion
 
 // #region Userinterface classes
+const targetFPS = 60;
 let viewWidth = window.innerWidth;
 let viewHeight = window.innerHeight;
 const gameContainer = new GameContainer({ viewWidth, viewHeight });
@@ -54,9 +55,11 @@ const update = () => {
     game.render();
     requestAnimationFrame(update);
 }
+
 function startGame() {
     update();
 }
+
 startGame();
 // #endregion
 

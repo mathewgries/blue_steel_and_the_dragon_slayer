@@ -79,9 +79,21 @@ export default class Entity {
         this.startKnockback();
     }
 
+    handleCollisionWithWeapon(weapon){
+        if (this.knockback.isActive) { return; }
+        const thisX = this.position.x + this.dimensions.width / 2;
+        const thisY = this.position.y + this.dimensions.height / 2;
+        const weaponX = weapon.attackPoint.x;
+        const weaponY = weapon.attackPoint.y;
+        const deltaX = thisX - weaponX;
+        const deltaY = thisY - weaponY;
+
+        this.knockback.direction = this.normalizeDirectionVector(deltaX, deltaY)
+        this.startKnockback();
+    }
+
     takeDamage(entity) {
         this.health = this.health - entity.attackDamage
-        this.handleCollisionWithEntity(entity)
         if (this.health <= 0) {
             // Handle player defeated
         }

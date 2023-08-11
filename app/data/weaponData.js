@@ -11,7 +11,17 @@ export const weaponData = {
             projectileType: 'rock',
         }
     ],
-    "sword": [],
+    "sword": [
+        {
+            type: 'sword',
+            name: 'wooden_sword',
+            icon: 'wooden-sword-icon.png',
+            attackDamage: 1,
+            staminaCost: 1,
+            reach: 24,
+            durability: 100,
+        }
+    ],
     "bow": [],
     // "axe": [],
     "flail": [],

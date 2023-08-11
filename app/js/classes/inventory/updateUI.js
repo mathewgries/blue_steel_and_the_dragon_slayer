@@ -1,5 +1,5 @@
 export function addWeaponToUI(weapon) {
-    const slot = document.getElementById(`${weapon.name}-slot-display`);
+    const slot = document.getElementById(`${weapon.type}-slot-display`);
     const imgContainer = document.createElement('div');
     imgContainer.classList.add('weapon-image-container');
     const img = document.createElement('img');

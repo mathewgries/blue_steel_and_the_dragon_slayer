@@ -61,6 +61,7 @@ class Enemy extends Entity {
         } else {
             super.update()
         }
+        console.log(this.health)
 
         this.draw()
     }

@@ -13,18 +13,40 @@ export default class Inventory {
             get count() { return this.amount },
             set count(num) { this.amount = num }
         }
-        this.potions = { health: 0, stamina: 0, strength: 0 };
+        this.potions = {
+            health: 0,
+            damage: 0,
+            defense: 0,
+            stamina: 0,
+        };
         this.materials = { wood: 0, iron: 0, stone: 0, steel: 0, copper: 0, carbon: 0 };
         this.equippedWeapon = {};
         this.equippedSecondary = null;
         this.equippedPotion = null;
 
         this.addWeapon({ type: 'sling', name: 'sling' })
+        this.addWeapon({type: 'sword', name: 'wooden_sword'})
         this.equipWeapon('sling')
     }
 
-    equipWeapon(weaponName) {
-        const newWeapon = this.weapons[weaponName];
+    handleWeaponSelection(keys) {
+        if (keys["1"]) {
+            this.equipWeapon("sling")
+        }
+        if (keys["2"]) {
+            if (this.weapons['sword']) {
+                this.equipWeapon('sword')
+            }
+        }
+        if (keys["3"]) {
+            if (this.weapons['bow']) {
+                this.equipWeapon("bow")
+            }
+        }
+    }
+
+    equipWeapon(type) {
+        const newWeapon = this.weapons[type];
         if (newWeapon) {
             updateActiveWeaponUI(this.equippedWeapon.type, newWeapon.type)
             this.equippedWeapon = newWeapon;
@@ -33,15 +55,20 @@ export default class Inventory {
 
     addWeapon({ type, name }) {
         const weapon = weaponData[type].find((x) => x.name);
-        this.weapons[name] = this.initalizeWeapon(weapon)
+        this.weapons[type] = this.initalizeWeapon(weapon)
         addWeaponToUI(weapon)
     }
 
     initalizeWeapon(weapon) {
-        if (weapon.name === 'sling') {
+        if (weapon.type === 'sling') {
             return new Sling({ ...weapon, canvas: this.canvas })
+        }
+        if (weapon.type === 'sword') {
+            return new Sword({ ...weapon, reach: weapon.reach, canvas: this.canvas })
         }
     }
 
-    update(keys, deltaTime) { }
+    update(keys) {
+        this.handleWeaponSelection(keys)
+    }
 }

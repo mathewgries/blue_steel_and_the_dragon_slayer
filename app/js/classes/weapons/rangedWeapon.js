@@ -3,7 +3,6 @@ import { Projectile } from './projectile.js';
 import { projecttileData } from '../../../data/projectileData.js';
 import { checkCanvasCollision } from '../../physics/collisionDetection.js';
 
-// #region RangedWeapon
 class RangedWeapon extends Weapon {
     constructor({ name, type, icon, attackDamage, staminaCost, durability, range, projectileType, canvas }) {
         super({ name, type, icon, attackDamage, staminaCost, durability, canvas })
@@ -12,14 +11,14 @@ class RangedWeapon extends Weapon {
         this.projectiles = [];
     }
 
-    attack({ position }) {
-        super.attack({ position })
+    attack({ position, dimensions }) {
+        super.attack({ position, dimensions })
         this.projectiles.push(
             new Projectile({
                 ...projecttileData[this.projectileType],
                 canvas: this.canvas,
-                xPosition: this.attackStartPoint.x + 8,
-                yPosition: this.attackStartPoint.y + 8,
+                xPosition: this.attackStartPoint.x,
+                yPosition: this.attackStartPoint.y,
                 direction: this.direction
             })
         )
@@ -28,7 +27,6 @@ class RangedWeapon extends Weapon {
     update(deltaTime) {
         if (this.projectiles.length > 0) {
             for (const projectile of this.projectiles) {
-                const index = this.projectiles.indexOf(projectile);
                 projectile.update(deltaTime)
                 if (checkCanvasCollision(projectile.bounds, this.canvas)) {
                     projectile.toBeRemoved = true
@@ -41,7 +39,6 @@ class RangedWeapon extends Weapon {
         }
     }
 }
-// #endregion
 
 // #region Sling
 class Sling extends RangedWeapon {

@@ -10,12 +10,7 @@ export default class Game {
         this.deltaTime = 1 / 60;
         this.keys = keys;
         this.enemies = []
-        this.enemies.push(
-            new Zombie({
-                ...entityData.zombie,
-                canvas: this.canvas
-            })
-        )
+        this.enemies.push(new Zombie({ ...entityData.zombie, canvas: this.canvas }))
     }
 
     resize({ viewWidth, viewHeight }) {
@@ -37,16 +32,22 @@ export default class Game {
             enemy.update(this.deltaTime)
             if (checkAABBCollision(this.player.bounds, enemy.bounds)) {
                 this.player.takeDamage(enemy)
+                this.player.handleCollisionWithEntity(enemy)
             }
-            if(playerProjectiles){
-                for(const projectile of playerProjectiles){
-                    if(checkAABBCollision(projectile.bounds, enemy.bounds)){
+            if (playerProjectiles) {
+                for (const projectile of playerProjectiles) {
+                    if (checkAABBCollision(projectile.bounds, enemy.bounds)) {
                         enemy.takeDamage(projectile)
+                        enemy.handleCollisionWithEntity(projectile)
                         projectile.toBeRemoved = true;
                     }
                 }
             }
+            if (this.player.inventory.equippedWeapon.attackPoint) {
+                this.player.inventory.equippedWeapon.handleAttackEnemy(enemy)
+            }
         }
+
         // Update the game state based on user input, physics, collisions, etc.
         // this.weaponSelector.update(/* pass required parameters here */);
     }

@@ -7,6 +7,7 @@ class Enemy extends Entity {
         this.fillColor = fillColor
         this.hasBeenHit = false;
         this.hasBeenHitDuration = 300;
+        this.toBeRemoved = false;
     }
 
     calculateNextPosition(deltaTime) {
@@ -51,6 +52,13 @@ class Enemy extends Entity {
         this.position = { x: nextX, y: nextY }
     }
 
+    takeDamage(entity){
+        super.takeDamage(entity);
+        if(this.health <= 0){
+            this.toBeRemoved = true;
+        }
+    }
+
     //*************************************************
     // UPDATE AND DRAW
     //*************************************************
@@ -61,8 +69,6 @@ class Enemy extends Entity {
         } else {
             super.update()
         }
-        console.log(this.health)
-
         this.draw()
     }
 

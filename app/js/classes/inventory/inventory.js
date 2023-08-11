@@ -25,13 +25,19 @@ export default class Inventory {
         this.equippedPotion = null;
 
         this.addWeapon({ type: 'sling', name: 'sling' })
-        this.addWeapon({type: 'sword', name: 'wooden_sword'})
+        this.addWeapon({ type: 'sword', name: 'wooden_sword' })
+        this.addWeapon({ type: 'bow', name: 'wooden_bow' })
+        this.addWeapon({ type: 'flail', name: 'wooden_flail' })
+        this.addWeapon({ type: 'crossbow', name: 'wooden_crossbow' })
+        this.addWeapon({ type: 'polearm', name: 'wooden_polearm' })
+        this.addWeapon({ type: 'mace', name: 'wooden_mace' })
+        this.addWeapon({ type: 'warhammer', name: 'wooden_warhammer' })
         this.equipWeapon('sling')
     }
 
     handleWeaponSelection(keys) {
         if (keys["1"]) {
-            this.equipWeapon("sling")
+            this.equipWeapon('sling')
         }
         if (keys["2"]) {
             if (this.weapons['sword']) {
@@ -40,7 +46,32 @@ export default class Inventory {
         }
         if (keys["3"]) {
             if (this.weapons['bow']) {
-                this.equipWeapon("bow")
+                this.equipWeapon('bow')
+            }
+        }
+        if (keys["4"]) {
+            if (this.weapons['flail']) {
+                this.equipWeapon('flail')
+            }
+        }
+        if (keys["5"]) {
+            if (this.weapons['crossbow']) {
+                this.equipWeapon('crossbow')
+            }
+        }
+        if (keys["6"]) {
+            if (this.weapons['polearm']) {
+                this.equipWeapon('polearm')
+            }
+        }
+        if (keys["7"]) {
+            if (this.weapons['mace']) {
+                this.equipWeapon('mace')
+            }
+        }
+        if (keys["8"]) {
+            if (this.weapons['warhammer']) {
+                this.equipWeapon('warhammer')
             }
         }
     }
@@ -64,7 +95,25 @@ export default class Inventory {
             return new Sling({ ...weapon, canvas: this.canvas })
         }
         if (weapon.type === 'sword') {
-            return new Sword({ ...weapon, reach: weapon.reach, canvas: this.canvas })
+            return new Sword({ ...weapon, canvas: this.canvas })
+        }
+        if (weapon.type === 'bow') {
+            return new Bow({ ...weapon, canvas: this.canvas })
+        }
+        if (weapon.type === 'flail') {
+            return new Flail({ ...weapon, canvas: this.canvas })
+        }
+        if (weapon.type === 'crossbow') {
+            return new Crossbow({ ...weapon, canvas: this.canvas })
+        }
+        if (weapon.type === 'polearm') {
+            return new Polearm({ ...weapon, canvas: this.canvas })
+        }
+        if (weapon.type === 'mace') {
+            return new Mace({ ...weapon, canvas: this.canvas })
+        }
+        if (weapon.type === 'warhammer') {
+            return new Warmhammer({ ...weapon, canvas: this.canvas })
         }
     }
 

@@ -46,9 +46,9 @@ export default class Game {
             if (this.player.inventory.equippedWeapon.attackPoint) {
                 this.player.inventory.equippedWeapon.handleAttackEnemy(enemy)
             }
+            if(enemy.toBeRemoved){
+                this.enemies = this.enemies.filter((enemy) => !enemy.toBeRemoved)
+            }
         }
-
-        // Update the game state based on user input, physics, collisions, etc.
-        // this.weaponSelector.update(/* pass required parameters here */);
     }
 }

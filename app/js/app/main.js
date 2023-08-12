@@ -39,7 +39,12 @@ const player = new Player({
     inventory,
     canvas
 })
-const game = new Game({ userInterface, canvas, player, keys });
+const game = new Game({ 
+    userInterface, 
+    canvas, 
+    player, 
+    keys 
+});
 // #endregion
 
 // #region Run the game

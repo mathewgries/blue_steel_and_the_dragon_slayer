@@ -1,11 +1,11 @@
-import { Weapon } from '../weapons/weapon.js'
+import Weapon from '../weapons/weapon.js'
 import { Projectile } from './projectile.js';
 import { projecttileData } from '../../../data/projectileData.js';
 import { checkCanvasCollision } from '../../physics/collisionDetection.js';
 
 class RangedWeapon extends Weapon {
-    constructor({ name, type, icon, attackDamage, staminaCost, durability, range, projectileType, canvas }) {
-        super({ name, type, icon, attackDamage, staminaCost, durability, canvas })
+    constructor({ name, type, icon, attackDamage, staminaCost, durability, attackRate, range, projectileType, canvas }) {
+        super({ name, type, icon, attackDamage, staminaCost, durability, attackRate, canvas })
         this.range = range;
         this.projectileType = projectileType;
         this.projectiles = [];
@@ -22,6 +22,10 @@ class RangedWeapon extends Weapon {
                 direction: this.direction
             })
         )
+    }
+
+    getDistance(projectile){
+        return Math.abs()
     }
 
     update(deltaTime) {
@@ -42,24 +46,22 @@ class RangedWeapon extends Weapon {
 
 // #region Sling
 class Sling extends RangedWeapon {
-    constructor({ name, type, icon, attackDamage, staminaCost, durability, range, projectileType, canvas }) {
-        super({ name, type, icon, attackDamage, staminaCost, durability, range, projectileType, canvas })
+    constructor({ name, type, icon, attackDamage, staminaCost, durability, range, attackRate, projectileType, canvas }) {
+        super({ name, type, icon, attackDamage, staminaCost, durability, range, attackRate, projectileType, canvas })
     }
 }
 // #endregion
-
 // #region Bow
 class Bow extends RangedWeapon {
-    constructor({ name, type, icon, attackDamage, staminaCost, durability, range, projectileType, canvas }) {
-        super({ name, type, icon, attackDamage, staminaCost, durability, range, projectileType, canvas })
+    constructor({ name, type, icon, attackDamage, staminaCost, durability, range, attackRate, projectileType, canvas }) {
+        super({ name, type, icon, attackDamage, staminaCost, durability, range, attackRate, projectileType, canvas })
     }
 }
 // #endregion
-
 // #region Crossbow
 class Crossbow extends RangedWeapon {
-    constructor({ name, type, icon, attackDamage, staminaCost, durability, range, projectileType, canvas }) {
-        super({ name, type, icon, attackDamage, staminaCost, durability, range, projectileType, canvas })
+    constructor({ name, type, icon, attackDamage, staminaCost, durability, range, attackRate, projectileType, canvas }) {
+        super({ name, type, icon, attackDamage, staminaCost, durability, range, attackRate, projectileType, canvas })
     }
 }
 // #endregion

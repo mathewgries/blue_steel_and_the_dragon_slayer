@@ -24,14 +24,14 @@ export default class Inventory {
         this.equippedSecondary = null;
         this.equippedPotion = null;
 
-        this.addWeapon({ type: 'sling', name: 'sling' })
-        this.addWeapon({ type: 'sword', name: 'wooden_sword' })
-        this.addWeapon({ type: 'bow', name: 'wooden_bow' })
-        this.addWeapon({ type: 'flail', name: 'wooden_flail' })
-        this.addWeapon({ type: 'crossbow', name: 'wooden_crossbow' })
-        this.addWeapon({ type: 'polearm', name: 'wooden_polearm' })
-        this.addWeapon({ type: 'mace', name: 'wooden_mace' })
-        this.addWeapon({ type: 'warhammer', name: 'wooden_warhammer' })
+        this.addWeapon({ ...weaponData['sling'].find((x) => x.name === 'sling') })
+        this.addWeapon({ ...weaponData['sword'].find((x) => x.name === 'wooden_sword') })
+        this.addWeapon({ ...weaponData['bow'].find((x) => x.name === 'wooden_bow') })
+        this.addWeapon({ ...weaponData['flail'].find((x) => x.name === 'wooden_flail') })
+        this.addWeapon({ ...weaponData['crossbow'].find((x) => x.name === 'wooden_crossbow') })
+        this.addWeapon({ ...weaponData['polearm'].find((x) => x.name === 'wooden_polearm') })
+        this.addWeapon({ ...weaponData['mace'].find((x) => x.name === 'wooden_mace') })
+        this.addWeapon({ ...weaponData['warhammer'].find((x) => x.name === 'wooden_warhammer') })
         this.equipWeapon('sling')
     }
 
@@ -84,36 +84,44 @@ export default class Inventory {
         }
     }
 
-    addWeapon({ type, name }) {
-        const weapon = weaponData[type].find((x) => x.name);
-        this.weapons[type] = this.initalizeWeapon(weapon)
+    addWeapon({ weaponClass, type, name }) {
+        const weapon = weaponData[type].find((x) => x.name === name);
+        if (weaponClass === 'range') {
+            this.initalizeRangedWeapon({ weapon, type })
+        }
+        if (weaponClass === 'melee') {
+            this.initalizeMeleeWeapon({ weapon, type })
+        }
         addWeaponToUI(weapon)
     }
 
-    initalizeWeapon(weapon) {
+    initalizeRangedWeapon({ weapon, type }) {
         if (weapon.type === 'sling') {
-            return new Sling({ ...weapon, canvas: this.canvas })
-        }
-        if (weapon.type === 'sword') {
-            return new Sword({ ...weapon, canvas: this.canvas })
+            this.weapons[type] = new Sling({ ...weapon, canvas: this.canvas })
         }
         if (weapon.type === 'bow') {
-            return new Bow({ ...weapon, canvas: this.canvas })
-        }
-        if (weapon.type === 'flail') {
-            return new Flail({ ...weapon, canvas: this.canvas })
+            this.weapons[type] = new Bow({ ...weapon, canvas: this.canvas })
         }
         if (weapon.type === 'crossbow') {
-            return new Crossbow({ ...weapon, canvas: this.canvas })
+            this.weapons[type] = new Crossbow({ ...weapon, canvas: this.canvas })
+        }
+    }
+
+    initalizeMeleeWeapon({ weapon, type }) {
+        if (weapon.type === 'sword') {
+            this.weapons[type] = new Sword({ ...weapon, canvas: this.canvas })
+        }
+        if (weapon.type === 'flail') {
+            this.weapons[type] = new Flail({ ...weapon, canvas: this.canvas })
         }
         if (weapon.type === 'polearm') {
-            return new Polearm({ ...weapon, canvas: this.canvas })
+            this.weapons[type] = new Polearm({ ...weapon, canvas: this.canvas })
         }
         if (weapon.type === 'mace') {
-            return new Mace({ ...weapon, canvas: this.canvas })
+            this.weapons[type] = new Mace({ ...weapon, canvas: this.canvas })
         }
         if (weapon.type === 'warhammer') {
-            return new Warmhammer({ ...weapon, canvas: this.canvas })
+            this.weapons[type] = new Warmhammer({ ...weapon, canvas: this.canvas })
         }
     }
 

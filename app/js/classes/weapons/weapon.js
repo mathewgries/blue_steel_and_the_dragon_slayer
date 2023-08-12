@@ -1,5 +1,5 @@
-class Weapon {
-    constructor({ name, type, icon, attackDamage, staminaCost, durability, canvas }) {
+export default class Weapon {
+    constructor({ name, type, icon, attackDamage, staminaCost, durability, attackRate, canvas }) {
         this.canvas = canvas;
         this.ctx = this.canvas.ctx;
         this.type = type;
@@ -11,7 +11,7 @@ class Weapon {
         this.durability = durability;
         this.maxDurability = durability;
         this.lastAttack = 0;
-        this.attackRate = 300;
+        this.attackRate = attackRate;
         this.isBoken = false;
         this.attackStartPoint = { x: 0, y: 0 }
     }
@@ -42,5 +42,3 @@ class Weapon {
 
     }
 }
-
-export { Weapon }

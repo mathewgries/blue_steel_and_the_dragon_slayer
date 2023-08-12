@@ -1,15 +1,15 @@
 import Weapon from '../weapons/weapon.js'
 
 class MeleeWeapon extends Weapon {
-    constructor({ name, type, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas }) {
-        super({ name, type, icon, attackDamage, staminaCost, durability, attackRate, canvas })
+    constructor({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas }) {
+        super({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, canvas })
         this.reach = reach;
         this.isAttack = false;
         this.attackPoint = null;
     }
 
-    attack({ position, dimensions }) {
-        super.attack({ position, dimensions });
+    attack() {
+        super.attack();
         this.attackPoint = {
             x: this.attackStartPoint.x + this.direction.x * this.reach,
             y: this.attackStartPoint.y + this.direction.y * this.reach
@@ -33,8 +33,8 @@ class MeleeWeapon extends Weapon {
         }
     }
 
-    update(deltaTime) {
-        super.update();
+    update({ startPoint, keys, direction}) {
+        super.update({ startPoint, keys, direction})
         if (this.isAttack) {
             this.drawAttackPoint();
         }
@@ -51,48 +51,43 @@ class MeleeWeapon extends Weapon {
 
 // #region Sword
 class Sword extends MeleeWeapon {
-    constructor({ name, type, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas }) {
-        super({ name, type, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas })
+    constructor({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas }) {
+        super({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas })
     }
 }
 // #endregion
-
 // #region Flail
 class Flail extends MeleeWeapon {
-    constructor({ name, type, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas }) {
-        super({ name, type, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas })
+    constructor({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas }) {
+        super({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas })
     }
 }
 // #endregion
-
 // #region Axe
 class Axe extends MeleeWeapon {
-    constructor({ name, type, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas }) {
-        super({ name, type, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas })
+    constructor({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas }) {
+        super({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas })
     }
 }
 // #endregion
-
 // #region Polearm
 class Polearm extends MeleeWeapon {
-    constructor({ name, type, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas }) {
-        super({ name, type, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas })
+    constructor({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas }) {
+        super({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas })
     }
 }
 // #endregion
-
 // #region Mace
 class Mace extends MeleeWeapon {
-    constructor({ name, type, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas }) {
-        super({ name, type, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas })
+    constructor({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas }) {
+        super({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas })
     }
 }
 // #endregion
-
 // #region Warmhammer
 class Warmhammer extends MeleeWeapon {
-    constructor({ name, type, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas }) {
-        super({ name, type, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas })
+    constructor({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas }) {
+        super({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas })
     }
 }
 // #endregion

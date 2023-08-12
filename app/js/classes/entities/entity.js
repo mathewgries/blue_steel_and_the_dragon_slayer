@@ -92,6 +92,15 @@ export default class Entity {
         this.startKnockback();
     }
 
+    handleCollisionWithCanvasBounds(){
+        if (checkCanvasCollision(this.bounds, this.canvas)) {
+            this.position = {
+                x: Math.max(0, Math.min(this.position.x, this.canvas.baseDimensions.width - this.dimensions.width)),
+                y: Math.max(0, Math.min(this.position.y, this.canvas.baseDimensions.height - this.dimensions.height))
+            }
+        }
+    }
+
     takeDamage(entity) {
         this.health = this.health - entity.attackDamage
         if (this.health <= 0) {
@@ -100,11 +109,6 @@ export default class Entity {
     }
 
     update() {
-        if (checkCanvasCollision(this.bounds, this.canvas)) {
-            this.position = {
-                x: Math.max(0, Math.min(this.position.x, this.canvas.baseDimensions.width - this.dimensions.width)),
-                y: Math.max(0, Math.min(this.position.y, this.canvas.baseDimensions.height - this.dimensions.height))
-            }
-        }
+       this.handleCollisionWithCanvasBounds()
     }
 }

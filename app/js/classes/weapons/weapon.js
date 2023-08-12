@@ -1,44 +1,61 @@
 export default class Weapon {
-    constructor({ name, type, icon, attackDamage, staminaCost, durability, attackRate, canvas }) {
+    constructor({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, canvas }) {
         this.canvas = canvas;
         this.ctx = this.canvas.ctx;
+        this.weaponClass = weaponClass;
         this.type = type;
         this.name = name;
         this.icon = icon;
-        this.direction = { x: 0, y: 1 }
+        this.direction = { x: 0, y: 1 };
+        this.attackStartPoint = { x: 0, y: 0 };
+        this.isAttack = false;
         this.attackDamage = attackDamage;
         this.staminaCost = staminaCost;
         this.durability = durability;
         this.maxDurability = durability;
+        this.isAttackKeyPressed = false;
         this.lastAttack = 0;
         this.attackRate = attackRate;
         this.isBoken = false;
-        this.attackStartPoint = { x: 0, y: 0 }
     }
 
     normalizeDirectionVector(xDirection, yDirection) {
-        let x = xDirection
-        let y = yDirection
+        let x = xDirection;
+        let y = yDirection;
         const length = Math.sqrt(x * x + y * y);
         if (length !== 0) {
             x /= length;
             y /= length;
         }
-        return { x, y }
+        return { x, y };
+    }
+
+    updateCoordinates({ startPoint, direction }) {
+        if (direction.x !== 0 || direction.y !== 0) {
+            this.direction = direction;
+        }
+        this.attackStartPoint = startPoint;
     }
 
     isAttackReady() {
         return Date.now() - this.lastAttack > this.attackRate;
     }
 
-    attack({ position, dimensions }) {
-        this.attackStartPoint = {
-            x: position.x + dimensions.width / 2,
-            y: position.y + dimensions.height / 2
+    attack() {
+        if (this.isAttackReady()) {
+            this.isAttackKeyPressed = true;
+            this.isAttack = true;
+            this.lastAttack = Date.now();
         }
     }
 
-    update() {
-
+    update({ startPoint, keys, direction }) {
+        this.updateCoordinates({ startPoint, direction });
+        if (keys["k"] && !this.isAttackKeyPressed) {
+            this.attack();
+        }
+        if (!keys["k"] && this.isAttackKeyPressed) {
+            this.isAttackKeyPressed = false;
+        }
     }
 }

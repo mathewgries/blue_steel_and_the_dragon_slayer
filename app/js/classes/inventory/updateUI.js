@@ -26,12 +26,12 @@ export function addWeaponToUI(weapon) {
 
     const containerHeight = imgContainer.offsetHeight;
     const imageHeight = imgWrapper.offsetHeight;
-    img.style.marginTop = `${ ((containerHeight/2) - (imageHeight/2))}px`
+    img.style.marginTop = `${((containerHeight / 2) - (imageHeight / 2))}px`
 }
 
-export function updateActiveWeaponUI(currentWeaponType, newWeaponType) {
-    if (currentWeaponType) {
-        document.getElementById(`${currentWeaponType}-slot-display`).classList.remove('equipped-weapon')
+export function updateActiveWeaponUI({ currentType, newType }) {
+    if (currentType) {
+        document.getElementById(`${currentType}-slot-display`).classList.remove('equipped-weapon')
     }
-    document.getElementById(`${newWeaponType}-slot-display`).classList.add('equipped-weapon')
+    document.getElementById(`${newType}-slot-display`).classList.add('equipped-weapon')
 }

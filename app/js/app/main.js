@@ -36,13 +36,13 @@ const player = new Player({
     ...entityData.player,
     xPosition: canvas.baseDimensions.width / 2,
     yPosition: canvas.baseDimensions.height / 2,
-    inventory,
     canvas
 })
 const game = new Game({ 
     userInterface, 
     canvas, 
-    player, 
+    player,
+    inventory,
     keys 
 });
 // #endregion

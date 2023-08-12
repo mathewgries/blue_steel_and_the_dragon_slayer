@@ -32,61 +32,61 @@ export default class Inventory {
         this.addWeapon({ ...weaponData['polearm'].find((x) => x.name === 'wooden_polearm') })
         this.addWeapon({ ...weaponData['mace'].find((x) => x.name === 'wooden_mace') })
         this.addWeapon({ ...weaponData['warhammer'].find((x) => x.name === 'wooden_warhammer') })
-        this.equipWeapon('sling')
+        this.equipWeapon({ type: 'sling' })
     }
 
-    handleWeaponSelection(keys) {
+    handleWeaponSelection({ keys }) {
         if (keys["1"]) {
-            this.equipWeapon('sling')
+            this.equipWeapon({ type: 'sling' })
         }
         if (keys["2"]) {
             if (this.weapons['sword']) {
-                this.equipWeapon('sword')
+                this.equipWeapon({ type: 'sword' })
             }
         }
         if (keys["3"]) {
             if (this.weapons['bow']) {
-                this.equipWeapon('bow')
+                this.equipWeapon({ type: 'bow' })
             }
         }
         if (keys["4"]) {
             if (this.weapons['flail']) {
-                this.equipWeapon('flail')
+                this.equipWeapon({ type: 'flail' })
             }
         }
         if (keys["5"]) {
             if (this.weapons['crossbow']) {
-                this.equipWeapon('crossbow')
+                this.equipWeapon({ type: 'crossbow' })
             }
         }
         if (keys["6"]) {
             if (this.weapons['polearm']) {
-                this.equipWeapon('polearm')
+                this.equipWeapon({ type: 'polearm' })
             }
         }
         if (keys["7"]) {
             if (this.weapons['mace']) {
-                this.equipWeapon('mace')
+                this.equipWeapon({ tyep: 'mace' })
             }
         }
         if (keys["8"]) {
             if (this.weapons['warhammer']) {
-                this.equipWeapon('warhammer')
+                this.equipWeapon({ type: 'warhammer' })
             }
         }
     }
 
-    equipWeapon(type) {
+    equipWeapon({ type }) {
         const newWeapon = this.weapons[type];
         if (newWeapon) {
-            updateActiveWeaponUI(this.equippedWeapon.type, newWeapon.type)
+            updateActiveWeaponUI({ currentType: this.equippedWeapon.type, newType: newWeapon.type })
             this.equippedWeapon = newWeapon;
         }
     }
 
     addWeapon({ weaponClass, type, name }) {
         const weapon = weaponData[type].find((x) => x.name === name);
-        if (weaponClass === 'range') {
+        if (weaponClass === 'ranged') {
             this.initalizeRangedWeapon({ weapon, type })
         }
         if (weaponClass === 'melee') {
@@ -125,7 +125,7 @@ export default class Inventory {
         }
     }
 
-    update(keys) {
-        this.handleWeaponSelection(keys)
+    update({ keys }) {
+        this.handleWeaponSelection({ keys })
     }
 }

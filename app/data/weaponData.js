@@ -1,7 +1,7 @@
 export const weaponData = {
     "sling": [
         {
-            weaponClass: 'range',
+            weaponClass: 'ranged',
             type: 'sling',
             name: 'sling',
             icon: 'sling-icon.png',
@@ -28,7 +28,7 @@ export const weaponData = {
     ],
     "bow": [
         {
-            weaponClass: 'range',
+            weaponClass: 'ranged',
             type: 'bow',
             name: 'wooden_bow',
             icon: 'wooden-bow-icon.png',
@@ -56,7 +56,7 @@ export const weaponData = {
     ],
     "crossbow": [
         {
-            weaponClass: 'range',
+            weaponClass: 'ranged',
             type: 'crossbow',
             name: 'wooden_crossbow',
             icon: 'wooden-crossbow-icon.png',

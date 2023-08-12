@@ -21,8 +21,9 @@ export const weaponData = {
             icon: 'wooden-sword-icon.png',
             attackDamage: 1,
             staminaCost: 1,
-            attackRate: 300,
             durability: 100,
+            attackRate: 500,
+            duration: 500,
             reach: 24,
         }
     ],
@@ -51,6 +52,7 @@ export const weaponData = {
             staminaCost: 1,
             durability: 100,
             attackRate: 300,
+            duration: 500,
             reach: 24,
         }
     ],
@@ -76,8 +78,9 @@ export const weaponData = {
             icon: 'wooden-polearm-icon.png',
             attackDamage: 1,
             staminaCost: 1,
-            attackRate: 300,
             durability: 100,
+            attackRate: 300,
+            duration: 500,
             reach: 24,
         }
     ],
@@ -91,6 +94,7 @@ export const weaponData = {
             staminaCost: 1,
             durability: 100,
             attackRate: 300,
+            duration: 500,
             reach: 24,
         }
     ],
@@ -104,6 +108,7 @@ export const weaponData = {
             staminaCost: 1,
             durability: 100,
             attackRate: 300,
+            duration: 500,
             reach: 24,
         }
     ],

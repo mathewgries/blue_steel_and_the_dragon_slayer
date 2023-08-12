@@ -42,17 +42,17 @@ export default class Weapon {
     }
 
     attack() {
-        if (this.isAttackReady()) {
-            this.isAttackKeyPressed = true;
-            this.isAttack = true;
-            this.lastAttack = Date.now();
-        }
+        this.isAttackKeyPressed = true;
+        this.isAttack = true;
+        this.lastAttack = Date.now();
     }
 
     update({ startPoint, keys, direction }) {
         this.updateCoordinates({ startPoint, direction });
         if (keys["k"] && !this.isAttackKeyPressed) {
-            this.attack();
+            if (this.isAttackReady()) {
+                this.attack();
+            }
         }
         if (!keys["k"] && this.isAttackKeyPressed) {
             this.isAttackKeyPressed = false;

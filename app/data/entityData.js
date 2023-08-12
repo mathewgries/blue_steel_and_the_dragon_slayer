@@ -17,7 +17,7 @@ export const entityData = {
         xSpeed: 50,
         ySpeed: 0,
         speed: 50,
-        health: 1,
+        health: 50,
         attackDamage: 1,
         fillColor: "green"
     }

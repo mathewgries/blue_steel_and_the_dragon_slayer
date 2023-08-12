@@ -31,10 +31,7 @@ export default class Game {
     }
 
     updatePlayer() {
-        this.player.update({
-            keys: this.keys,
-            deltaTime: this.deltaTime
-        });
+        this.player.update({ keys: this.keys, deltaTime: this.deltaTime });
     }
 
     updateInventory() {
@@ -56,13 +53,11 @@ export default class Game {
             keys: this.keys,
             direction: this.player.direction
         });
-        if (this.equippedWeapon.isAttack) {
-            if (this.equippedWeapon.weaponClass === 'ranged') {
+
+        if (this.equippedWeapon.weaponClass === 'ranged') {
+            if (this.equippedWeapon.isAttack) {
                 this.playerProjectiles.push(this.equippedWeapon.createProjectile());
                 this.equippedWeapon.isAttack = false;
-            }
-            if (this.equippedWeapon.weaponClass === 'melee') {
-                
             }
         }
     }
@@ -72,8 +67,39 @@ export default class Game {
             for (const projectile of this.playerProjectiles) {
                 projectile.update({ deltaTime: this.deltaTime });
             }
-            this.playerProjectiles = this.playerProjectiles.filter((projectile) => !projectile.toBeRemoved);
         }
+    }
+
+    updateEnemies() {
+        for (const enemy of this.enemies) {
+            enemy.update(this.deltaTime)
+
+            if (checkAABBCollision(this.player.bounds, enemy.bounds)) {
+                this.player.takeDamage(enemy)
+                this.player.handleCollisionWithEntity(enemy)
+            }
+
+            if (this.playerProjectiles.length > 0) {
+                for (const projectile of this.playerProjectiles) {
+                    if (checkAABBCollision(projectile.bounds, enemy.bounds)) {
+                        enemy.takeDamage(projectile)
+                        enemy.handleCollisionWithEntity(projectile)
+                        projectile.toBeRemoved = true;
+                    }
+                }
+            }
+
+            if (this.equippedWeapon.weaponClass === 'melee') {
+                if (this.equippedWeapon.isAttack) {
+                    this.equippedWeapon.handleAttackEnemy(enemy)
+                }
+            }
+        }
+    }
+
+    updateEntityLists() {
+        this.playerProjectiles = this.playerProjectiles.filter((projectile) => !projectile.toBeRemoved)
+        this.enemies = this.enemies.filter((enemy) => !enemy.toBeRemoved)
     }
 
     update() {
@@ -83,32 +109,8 @@ export default class Game {
         this.updateInventory();
         this.updateEquippedWeapon();
         this.updatePlayerProjectiles();
+        this.updateEnemies();
 
-        // const playerProjectiles =
-        //     this.player.inventory.equippedWeapon.projectiles
-        //         ? this.player.inventory.equippedWeapon.projectiles
-        //         : null
-        // for (const enemy of this.enemies) {
-        //     enemy.update(this.deltaTime)
-        //     if (checkAABBCollision(this.player.bounds, enemy.bounds)) {
-        //         this.player.takeDamage(enemy)
-        //         this.player.handleCollisionWithEntity(enemy)
-        //     }
-        //     if (playerProjectiles) {
-        //         for (const projectile of playerProjectiles) {
-        //             if (checkAABBCollision(projectile.bounds, enemy.bounds)) {
-        //                 enemy.takeDamage(projectile)
-        //                 enemy.handleCollisionWithEntity(projectile)
-        //                 projectile.toBeRemoved = true;
-        //             }
-        //         }
-        //     }
-        //     if (this.player.inventory.equippedWeapon.attackPoint) {
-        //         this.player.inventory.equippedWeapon.handleAttackEnemy(enemy)
-        //     }
-        //     if (enemy.toBeRemoved) {
-        //         this.enemies = this.enemies.filter((enemy) => !enemy.toBeRemoved)
-        //     }
-        // }
+        this.updateEntityLists()
     }
 }

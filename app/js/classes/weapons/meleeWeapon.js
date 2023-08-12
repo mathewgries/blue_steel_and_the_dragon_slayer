@@ -1,24 +1,12 @@
 import Weapon from '../weapons/weapon.js'
 
 class MeleeWeapon extends Weapon {
-    constructor({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas }) {
-        super({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, canvas })
+    constructor({ weaponClass, type, name, icon, attackDamage, staminaCost, durability, attackRate, duration, reach, canvas }) {
+        super({ weaponClass, type, name, icon, attackDamage, staminaCost, durability, attackRate, canvas });
+        this.duration = duration;
         this.reach = reach;
         this.isAttack = false;
         this.attackPoint = null;
-    }
-
-    attack() {
-        super.attack();
-        this.attackPoint = {
-            x: this.attackStartPoint.x + this.direction.x * this.reach,
-            y: this.attackStartPoint.y + this.direction.y * this.reach
-        };
-        this.isAttack = true;
-        setTimeout(() => {
-            this.isAttack = false
-            this.attackPoint = null
-        }, this.attackRate);
     }
 
     handleAttackEnemy(enemy) {
@@ -29,15 +17,30 @@ class MeleeWeapon extends Weapon {
             this.attackPoint.y <= enemy.position.y + enemy.dimensions.height
         ) {
             enemy.takeDamage(this);
-            enemy.handleCollisionWithWeapon(this)
+            enemy.handleCollisionWithWeapon(this);
         }
     }
 
-    update({ startPoint, keys, direction}) {
-        super.update({ startPoint, keys, direction})
-        if (this.isAttack) {
+    setAttackPoint() {
+        this.attackPoint = {
+            x: this.attackStartPoint.x + this.direction.x * this.reach,
+            y: this.attackStartPoint.y + this.direction.y * this.reach
+        };
+    }
+
+    attack(){
+        super.attack();
+        setTimeout(() => {
+            this.isAttack = false;
+        }, this.duration)
+    }
+
+    update({ startPoint, keys, direction }) {
+        super.update({ startPoint, keys, direction });
+        if(this.isAttack){
             this.drawAttackPoint();
         }
+        this.setAttackPoint();
     }
 
     drawAttackPoint() {
@@ -51,43 +54,43 @@ class MeleeWeapon extends Weapon {
 
 // #region Sword
 class Sword extends MeleeWeapon {
-    constructor({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas }) {
-        super({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas })
+    constructor({ weaponClass, type, name, icon, attackDamage, staminaCost, durability, attackRate, duration, reach, canvas }) {
+        super({ weaponClass, type, name, icon, attackDamage, staminaCost, durability, attackRate, duration, reach, canvas })
     }
 }
 // #endregion
 // #region Flail
 class Flail extends MeleeWeapon {
-    constructor({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas }) {
-        super({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas })
+    constructor({ weaponClass, type, name, icon, attackDamage, staminaCost, durability, attackRate, duration, reach, canvas }) {
+        super({ weaponClass, type, name, icon, attackDamage, staminaCost, durability, attackRate, duration, reach, canvas })
     }
 }
 // #endregion
 // #region Axe
 class Axe extends MeleeWeapon {
-    constructor({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas }) {
-        super({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas })
+    constructor({ weaponClass, type, name, icon, attackDamage, staminaCost, durability, attackRate, duration, reach, canvas }) {
+        super({ weaponClass, type, name, icon, attackDamage, staminaCost, durability, attackRate, duration, reach, canvas })
     }
 }
 // #endregion
 // #region Polearm
 class Polearm extends MeleeWeapon {
-    constructor({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas }) {
-        super({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas })
+    constructor({ weaponClass, type, name, icon, attackDamage, staminaCost, durability, attackRate, duration, reach, canvas }) {
+        super({ weaponClass, type, name, icon, attackDamage, staminaCost, durability, attackRate, duration, reach, canvas })
     }
 }
 // #endregion
 // #region Mace
 class Mace extends MeleeWeapon {
-    constructor({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas }) {
-        super({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas })
+    constructor({ weaponClass, type, name, icon, attackDamage, staminaCost, durability, attackRate, duration, reach, canvas }) {
+        super({ weaponClass, type, name, icon, attackDamage, staminaCost, durability, attackRate, duration, reach, canvas })
     }
 }
 // #endregion
 // #region Warmhammer
 class Warmhammer extends MeleeWeapon {
-    constructor({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas }) {
-        super({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, reach, canvas })
+    constructor({ weaponClass, type, name, icon, attackDamage, staminaCost, durability, attackRate, duration, reach, canvas }) {
+        super({ weaponClass, type, name, icon, attackDamage, staminaCost, durability, attackRate, duration, reach, canvas })
     }
 }
 // #endregion

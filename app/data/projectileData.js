@@ -13,7 +13,7 @@ export const projecttileData = {
         speed: 150,
         xSpeed: 150,
         ySpeed: 150,
-        baseWidth: 4,
+        baseWidth: 3,
         baseHeight: 16,
         attackDamage: 1,
     }

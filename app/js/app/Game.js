@@ -44,20 +44,21 @@ export default class Game {
 
     updateEquippedWeapon() {
         this.equippedWeapon = this.inventory.equippedWeapon;
+        const weapon = this.equippedWeapon
         const startPoint = {
             x: this.player.position.x + this.player.dimensions.width / 2,
             y: this.player.position.y + this.player.dimensions.height / 2
         };
-        this.equippedWeapon.update({
+        weapon.update({
             startPoint,
             keys: this.keys,
             direction: this.player.direction
         });
 
-        if (this.equippedWeapon.weaponClass === 'ranged') {
-            if (this.equippedWeapon.isAttack) {
-                this.playerProjectiles.push(this.equippedWeapon.createProjectile());
-                this.equippedWeapon.isAttack = false;
+        if (weapon.weaponClass === 'ranged') {
+            if (weapon.isAttack && !weapon.isBroken) {
+                this.playerProjectiles.push(weapon.createProjectile());
+                weapon.isAttack = false;
             }
         }
     }
@@ -71,16 +72,20 @@ export default class Game {
     }
 
     updateEnemies() {
+        const player = this.player
+        const weapon = this.equippedWeapon
+        const playerProjectiles = this.playerProjectiles
+
         for (const enemy of this.enemies) {
             enemy.update(this.deltaTime)
 
-            if (checkAABBCollision(this.player.bounds, enemy.bounds)) {
-                this.player.takeDamage(enemy)
-                this.player.handleCollisionWithEntity(enemy)
+            if (checkAABBCollision(player.bounds, enemy.bounds)) {
+                player.takeDamage(enemy)
+                player.handleCollisionWithEntity(enemy)
             }
 
-            if (this.playerProjectiles.length > 0) {
-                for (const projectile of this.playerProjectiles) {
+            if (playerProjectiles.length > 0) {
+                for (const projectile of playerProjectiles) {
                     if (checkAABBCollision(projectile.bounds, enemy.bounds)) {
                         enemy.takeDamage(projectile)
                         enemy.handleCollisionWithEntity(projectile)
@@ -89,9 +94,9 @@ export default class Game {
                 }
             }
 
-            if (this.equippedWeapon.weaponClass === 'melee') {
-                if (this.equippedWeapon.isAttack) {
-                    this.equippedWeapon.handleAttackEnemy(enemy)
+            if (weapon.weaponClass === 'melee') {
+                if (weapon.isAttack) {
+                    weapon.handleAttackEnemy(enemy)
                 }
             }
         }

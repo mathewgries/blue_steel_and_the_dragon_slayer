@@ -13,6 +13,7 @@ export function addWeaponToUI(weapon) {
     durabilityMeter.classList.add('weapon-durability-meter');
     const durabilityMeterFill = document.createElement('div');
     durabilityMeterFill.classList.add('weapon-durability-meter-fill');
+    durabilityMeterFill.setAttribute('id', `${weapon.type}-meter-fill`)
     durabilityMeterFill.style.width = '100%';
     durabilityMeterFill.style.height = '100%';
     durabilityMeterFill.style.backgroundColor = 'lightgreen';

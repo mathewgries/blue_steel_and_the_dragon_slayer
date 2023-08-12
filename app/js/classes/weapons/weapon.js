@@ -1,5 +1,7 @@
+import { updateDurabilityMeter } from './updateUi.js';
+
 export default class Weapon {
-    constructor({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, attackRate, canvas }) {
+    constructor({ name, type, weaponClass, icon, attackDamage, staminaCost, durability, durabilityRate, attackRate, canvas }) {
         this.canvas = canvas;
         this.ctx = this.canvas.ctx;
         this.weaponClass = weaponClass;
@@ -12,11 +14,12 @@ export default class Weapon {
         this.attackDamage = attackDamage;
         this.staminaCost = staminaCost;
         this.durability = durability;
+        this.durabilityRate = durabilityRate;
         this.maxDurability = durability;
         this.isAttackKeyPressed = false;
         this.lastAttack = 0;
         this.attackRate = attackRate;
-        this.isBoken = false;
+        this.isBroken = false;
     }
 
     normalizeDirectionVector(xDirection, yDirection) {
@@ -45,6 +48,16 @@ export default class Weapon {
         this.isAttackKeyPressed = true;
         this.isAttack = true;
         this.lastAttack = Date.now();
+        this.updateDurability();
+    }
+
+    updateDurability() {
+        this.durability -= this.durabilityRate;
+        const percentage = (this.durability / this.maxDurability) * 100;
+        updateDurabilityMeter({ percentage, weaponType: this.type });
+        if (percentage <= 0) {
+            this.isBroken = true;
+        }
     }
 
     update({ startPoint, keys, direction }) {

@@ -115,11 +115,11 @@ export default class Inventory {
         }
         if (type === 'grapple') {
             this.secondaryWeapons[type] = new Grapple({ ...weapon, canvas: this.canvas });
-            centerImageToSLotUI({weapon})
+            centerImageToSLotUI({ weapon })
         }
         if (type === 'shovel') {
             this.secondaryWeapons[type] = new Shovel({ ...weapon, canvas: this.canvas });
-            centerImageToSLotUI({weapon})
+            centerImageToSLotUI({ weapon })
         }
     }
 

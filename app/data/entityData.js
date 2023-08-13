@@ -8,6 +8,7 @@ export const entityData = {
         speed: 50,
         health: 60,
         attackDamage: 0,
+        stamina: 100,
     },
     zombie: {
         xPosition: 20,

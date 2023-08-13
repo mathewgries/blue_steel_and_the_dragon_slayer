@@ -19,7 +19,7 @@ class RangedWeapon extends Weapon {
             yPosition: this.attackStartPoint.y,
             direction: this.direction,
             range: this.range
-        })
+        });
     }
 }
 

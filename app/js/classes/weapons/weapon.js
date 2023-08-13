@@ -60,10 +60,10 @@ export default class Weapon {
         }
     }
 
-    update({ startPoint, keys, direction }) {
+    update({ startPoint, keys, direction, stamina }) {
         this.updateCoordinates({ startPoint, direction });
         if (keys["k"] && !this.isAttackKeyPressed) {
-            if (this.isAttackReady()) {
+            if (this.isAttackReady() && !this.isBroken && this.durability > 0 && stamina) {
                 this.attack();
             }
         }

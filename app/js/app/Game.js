@@ -41,19 +41,24 @@ export default class Game {
     updateEquippedWeapon() {
         this.equippedWeapon = this.inventory.equippedWeapon;
         const weapon = this.equippedWeapon;
+        const player = this.player;
+        const playerProjectiles = this.playerProjectiles;
+
         const startPoint = {
-            x: this.player.position.x + this.player.dimensions.width / 2,
-            y: this.player.position.y + this.player.dimensions.height / 2
+            x: player.position.x + player.dimensions.width / 2,
+            y: player.position.y + player.dimensions.height / 2
         };
         weapon.update({
             startPoint,
             keys: this.keys,
-            direction: this.player.direction
+            direction: player.direction,
+            stamina: !player.staminaRefillPaused
         });
 
         if (weapon.weaponClass === 'ranged') {
-            if (weapon.isAttack && !weapon.isBroken) {
-                this.playerProjectiles.push(weapon.createProjectile());
+            if (weapon.isAttack) {
+                playerProjectiles.push(weapon.createProjectile());
+                player.depleteStamina(weapon.staminaCost);
                 weapon.isAttack = false;
             }
         }
@@ -93,6 +98,11 @@ export default class Game {
             if (weapon.weaponClass === 'melee') {
                 if (weapon.isAttack) {
                     weapon.handleAttackEnemy(enemy);
+                    if (weapon.useStamina) {
+                        player.depleteStamina(weapon.staminaCost);
+                        weapon.useStamina = false;
+                    }
+
                 }
             }
         }

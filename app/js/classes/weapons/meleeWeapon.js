@@ -6,6 +6,7 @@ class MeleeWeapon extends Weapon {
         this.duration = duration;
         this.reach = reach;
         this.isAttack = false;
+        this.useStamina = true;
         this.attackPoint = null;
     }
 
@@ -32,11 +33,12 @@ class MeleeWeapon extends Weapon {
         super.attack();
         setTimeout(() => {
             this.isAttack = false;
+            this.useStamina = true;
         }, this.duration)
     }
 
-    update({ startPoint, keys, direction }) {
-        super.update({ startPoint, keys, direction });
+    update({ startPoint, keys, direction, stamina }) {
+        super.update({ startPoint, keys, direction, stamina });
         if (this.isAttack) {
             this.drawAttackPoint();
         }

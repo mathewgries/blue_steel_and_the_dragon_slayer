@@ -103,9 +103,6 @@ export default class Entity {
 
     takeDamage(entity) {
         this.health = this.health - entity.attackDamage
-        if (this.health <= 0) {
-            // Handle player defeated
-        }
     }
 
     update() {

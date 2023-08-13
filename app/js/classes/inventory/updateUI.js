@@ -1,8 +1,8 @@
 export function addWeaponSlotUI({ weapon }) {
     const slot = document.getElementById(`${weapon.type}-slot-display`);
-    slot.style.backgroundColor = '#443355'
+    slot.style.backgroundColor = '#443355';
     const imgContainer = document.createElement('div');
-    imgContainer.setAttribute('id', `${weapon.type}-image-container`)
+    imgContainer.setAttribute('id', `${weapon.type}-image-container`);
     imgContainer.classList.add('weapon-image-container');
     const imgWrapper = document.createElement('div');
     imgWrapper.classList.add('weapon-image-wrapper');
@@ -14,7 +14,7 @@ export function addWeaponSlotUI({ weapon }) {
     slot.appendChild(imgContainer);
     const containerHeight = imgContainer.offsetHeight;
     const imageHeight = imgWrapper.offsetHeight;
-    img.style.marginTop = `${((containerHeight / 2) - (imageHeight / 2))}px`
+    img.style.marginTop = `${((containerHeight / 2) - (imageHeight / 2))}px`;
 }
 
 export function addDurabilityContainerUI({ weapon }) {
@@ -25,7 +25,7 @@ export function addDurabilityContainerUI({ weapon }) {
     durabilityMeter.classList.add('weapon-durability-meter');
     const durabilityMeterFill = document.createElement('div');
     durabilityMeterFill.classList.add('weapon-durability-meter-fill');
-    durabilityMeterFill.setAttribute('id', `${weapon.type}-meter-fill`)
+    durabilityMeterFill.setAttribute('id', `${weapon.type}-meter-fill`);
     durabilityMeterFill.style.width = '100%';
     durabilityMeterFill.style.height = '100%';
     durabilityMeterFill.style.backgroundColor = 'lightgreen';
@@ -35,24 +35,26 @@ export function addDurabilityContainerUI({ weapon }) {
 }
 
 export function addWeaponCountUI({ weapon, count }) {
+
     const slot = document.getElementById(`${weapon.type}-slot-display`);
     const countContainer = document.createElement('div');
     countContainer.classList.add('weapon-count-container');
-    countContainer.innerText = count
+    countContainer.setAttribute('id', `${weapon.type}-count-container`);
+    countContainer.innerText = count;
     slot.appendChild(countContainer);
 }
 
 export function updateActiveWeaponUI({ currentType, newType }) {
     if (currentType) {
-        document.getElementById(`${currentType}-slot-display`).classList.remove('equipped-weapon')
+        document.getElementById(`${currentType}-slot-display`).classList.remove('equipped-weapon');
     }
-    document.getElementById(`${newType}-slot-display`).classList.add('equipped-weapon')
+    document.getElementById(`${newType}-slot-display`).classList.add('equipped-weapon');
 }
 
 export function centerImageToSLotUI({ weapon }) {
     const slot = document.getElementById(`${weapon.type}-slot-display`);
-    const imgContainer = document.getElementById(`${weapon.type}-image-container`)
+    const imgContainer = document.getElementById(`${weapon.type}-image-container`);
     const slotHeight = slot.offsetHeight;
     const containerHeight = imgContainer.offsetHeight;
-    imgContainer.style.marginTop = `${((slotHeight / 2) - (containerHeight / 2)) / 2}px`
+    imgContainer.style.marginTop = `${((slotHeight / 2) - (containerHeight / 2)) / 2}px`;
 }

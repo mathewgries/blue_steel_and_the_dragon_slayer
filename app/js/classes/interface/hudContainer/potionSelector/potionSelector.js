@@ -2,23 +2,21 @@ import PotionSlot from "./potionSlot.js";
 import { potionData } from "../../../../../data/potionData.js";
 
 export default class PotionSelector {
-    constructor({ width, height }) {
+    constructor() {
         this.container = document.getElementById('potion-selector-container');
-        this.potionSlots = this.buildPotionSlots(width, height)
+        this.potionSlots = this.buildPotionSlots();
     }
 
-    buildPotionSlots(width, height) {
-        const potionsTypes = Object.keys(potionData)
+    buildPotionSlots() {
+        const potionsTypes = Object.keys(potionData);
         return potionsTypes.map((potion) => {
-            const element = new PotionSlot({ potion: potionData[potion], width, height });
+            const element = new PotionSlot({ potion: potionData[potion] });
             this.container.appendChild(element.container);
-            return element
+            return element;
         });
     }
 
-    resize({ width, height }) {
-        this.potionSlots.forEach((slot) => slot.resize({ width, height }))
+    resize() {
+        this.potionSlots.forEach((slot) => slot.resize());
     }
-
-    update({ width, height }) { }
 }

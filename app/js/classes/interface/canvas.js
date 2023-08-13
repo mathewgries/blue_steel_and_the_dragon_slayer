@@ -1,35 +1,35 @@
 export default class Canvas {
-    constructor({ width, height }) {
+    constructor({ height }) {
         this.container = document.getElementById("canvas-container");
         this.canvas = document.getElementById("game-canvas");
         this.ctx = this.canvas.getContext("2d");
         this.borderSize = 2;
-        this.baseDimensions = { width: 256, height: 240 }
+        this.baseDimensions = { width: 256, height: 240 };
         this.aspectRatio = this.baseDimensions.width / this.baseDimensions.height;
         this.dimensions = {
             width: Math.floor((height * this.aspectRatio) - 3),
             height: Math.floor(height - (this.borderSize * 2))
-        }
-        this.cellSize = 16
-        this.scale = this.dimensions.width / this.baseDimensions.width
-        this.setScale()
+        };
+        this.cellSize = 16;
+        this.scale = this.dimensions.width / this.baseDimensions.width;
+        this.setScale();
     }
 
-    resize({ width, height }) {
+    resize({ height }) {
         this.clear();
-        this.setDimensions({ width, height });
-        this.resizeContainer()
-        this.resizeCanvas()
-        this.ctxParameters()
-        this.setScale()
+        this.setDimensions({ height });
+        this.resizeContainer();
+        this.resizeCanvas();
+        this.ctxParameters();
+        this.setScale();
         this.drawGrid();
     }
 
-    setDimensions({ width, height }) {
+    setDimensions({ height }) {
         this.dimensions = {
             width: Math.floor((height * this.aspectRatio) - 3),
             height: Math.floor(height - (this.borderSize * 2))
-        }
+        };
     }
 
     resizeContainer() {
@@ -49,7 +49,7 @@ export default class Canvas {
     }
 
     setScale() {
-        this.scale = this.dimensions.width / this.baseDimensions.width
+        this.scale = this.dimensions.width / this.baseDimensions.width;
         this.ctx.scale(this.scale, this.scale);
     }
 
@@ -63,16 +63,14 @@ export default class Canvas {
     }
 
     drawGrid() {
-        this.ctx.strokeStyle = 'lightgray'; // Set the color of the grid lines
-        this.ctx.lineWidth = 1; // Set the line width to 1 for sharp grid lines
-        // Draw vertical grid lines
+        this.ctx.strokeStyle = 'lightgray';
+        this.ctx.lineWidth = 1;
         for (let x = 0; x <= this.dimensions.width; x += this.cellSize) {
             this.ctx.beginPath();
             this.ctx.moveTo(x, 0);
             this.ctx.lineTo(x, this.dimensions.height);
             this.ctx.stroke();
         }
-        // Draw horizontal grid lines
         for (let y = 0; y <= this.dimensions.height; y += this.cellSize) {
             this.ctx.beginPath();
             this.ctx.moveTo(0, y);

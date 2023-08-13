@@ -1,11 +1,11 @@
-import { Sword, Flail, Axe, Polearm, Mace, Warmhammer } from '../weapons/meleeWeapon.js'
-import { Sling, Bow, Crossbow } from '../weapons/rangedWeapon.js'
+import { Sword, Flail, Axe, Polearm, Mace, Warmhammer } from '../weapons/meleeWeapon.js';
+import { Sling, Bow, Crossbow } from '../weapons/rangedWeapon.js';
 import Bomb from '../secondaryWeapons/bomb.js';
 import Grapple from '../secondaryWeapons/grapple.js';
 import Shovel from '../secondaryWeapons/shovel.js';
-import { weaponData } from '../../../data/weaponData.js'
+import { weaponData } from '../../../data/weaponData.js';
 import { addWeaponSlotUI, addDurabilityContainerUI, addWeaponCountUI, updateActiveWeaponUI, centerImageToSLotUI } from './updateUI.js';
-import { secondaryWeaponData } from '../../../data/secondaryWeaponData.js'
+import { secondaryWeaponData } from '../../../data/secondaryWeaponData.js';
 
 export default class Inventory {
     constructor({ canvas }) {
@@ -94,8 +94,8 @@ export default class Inventory {
         if (weaponClass === 'melee') {
             this.initalizeMeleeWeapon({ weapon, type });
         }
-        addWeaponSlotUI({ weapon })
-        addDurabilityContainerUI({ weapon })
+        addWeaponSlotUI({ weapon });
+        addDurabilityContainerUI({ weapon });
     }
 
     equipSecondaryWeapon({ type }) {
@@ -111,15 +111,15 @@ export default class Inventory {
         addWeaponSlotUI({ weapon });
         if (type === 'bomb') {
             this.secondaryWeapons[type] = new Bomb({ ...weapon, canvas: this.canvas });
-            addWeaponCountUI({ weapon, count: this.bombs })
+            addWeaponCountUI({ weapon, count: this.bombs });
         }
         if (type === 'grapple') {
             this.secondaryWeapons[type] = new Grapple({ ...weapon, canvas: this.canvas });
-            centerImageToSLotUI({ weapon })
+            centerImageToSLotUI({ weapon });
         }
         if (type === 'shovel') {
             this.secondaryWeapons[type] = new Shovel({ ...weapon, canvas: this.canvas });
-            centerImageToSLotUI({ weapon })
+            centerImageToSLotUI({ weapon });
         }
     }
 

@@ -2,25 +2,21 @@ import MaterialSlot from "./materialSlot.js";
 import { materialData } from "../../../../../data/materialData.js";
 
 export default class MaterialContainer {
-    constructor({ width, height }) {
+    constructor() {
         this.container = document.getElementById('material-container');
-        this.materialSlots = this.buildMaterialSlots(width, height)
+        this.materialSlots = this.buildMaterialSlots();
     }
 
-    buildMaterialSlots(width, height) {
-        const materialTypes = Object.keys(materialData)
+    buildMaterialSlots() {
+        const materialTypes = Object.keys(materialData);
         return materialTypes.map((material) => {
-            const element = new MaterialSlot({ material: materialData[material], width, height });
+            const element = new MaterialSlot({ material: materialData[material] });
             this.container.appendChild(element.container);
-            return element
+            return element;
         });
     }
 
-    resize({ width, height }) {
-        this.materialSlots.forEach((slot) => slot.resize({ width, height }))
-    }
-
-    update() {
-
+    resize() {
+        this.materialSlots.forEach((slot) => slot.resize());
     }
 }

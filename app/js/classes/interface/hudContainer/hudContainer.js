@@ -5,7 +5,7 @@ import PotionSelector from "./potionSelector/potionSelector.js";
 import MaterialContainer from "./materialContainer/materialContainer.js";
 
 export default class HudContainer {
-    constructor({ width, height, diff }) {
+    constructor({ height, diff }) {
         this.container = document.getElementById('hud-container');
         this.borderSize = 2;
         this.widthOffset = this.borderSize + (this.borderSize / 2) + 3;
@@ -15,9 +15,9 @@ export default class HudContainer {
             height: Math.floor(height - this.heightOffset)
         };
         this.aspectRatio = this.dimensions.width / this.dimensions.height;
-        this.statusBar = new StatusBur({ ...this.dimensions });
-        this.weaponSelector = new WeaponSelector({ ...this.dimensions });
-        this.secondaryWeaponSelector = new SecondaryWeaponSelector({ ...this.dimensions });
+        this.statusBar = new StatusBur();
+        this.weaponSelector = new WeaponSelector();
+        this.secondaryWeaponSelector = new SecondaryWeaponSelector();
         this.potionSelector = new PotionSelector({ ...this.dimensions });
         this.materialContainer = new MaterialContainer({ ...this.dimensions });
     }
@@ -41,10 +41,9 @@ export default class HudContainer {
     }
 
     resizeDependents() {
-        this.statusBar.resize({ ...this.dimensions });
-        this.potionSelector.resize({ ...this.dimensions });
-        this.materialContainer.resize({ ...this.dimensions });
+        this.statusBar.resize();
+        this.secondaryWeaponSelector.resize();
+        this.potionSelector.resize();
+        this.materialContainer.resize();
     }
-
-    update({ height, diff }) { }
 }

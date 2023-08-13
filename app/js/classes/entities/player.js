@@ -3,8 +3,8 @@ import Entity from "./entity.js";
 export default class Player extends Entity {
     constructor({ xPosition, yPosition, baseWidth, baseHeight, xSpeed, ySpeed, speed, health, attackDamage, canvas }) {
         super({ xPosition, yPosition, baseWidth, baseHeight, xSpeed, ySpeed, speed, health, attackDamage, canvas })
-        this.icon = new Image()
-        this.icon.src = '../../assets/images/player/kikk-sample.png'
+        this.icon = new Image();
+        this.icon.src = '../../assets/images/player/kikk-sample.png';
         this.isAttackKeyPressed = false;
     }
 
@@ -33,9 +33,9 @@ export default class Player extends Entity {
 
     update({ keys, deltaTime }) {
         const playerMovement = this.baseSpeed * deltaTime;
-        this.handleNormalMovement(keys, playerMovement)
-        super.update()
-        this.draw()
+        this.handleNormalMovement(keys, playerMovement);
+        super.update();
+        this.draw();
     }
 
     draw() {
@@ -45,6 +45,6 @@ export default class Player extends Entity {
             this.position.y,
             this.icon.width,
             this.icon.height
-        )
+        );
     }
 }

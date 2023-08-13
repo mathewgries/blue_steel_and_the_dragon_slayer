@@ -4,7 +4,7 @@ import { checkCanvasCollision } from "../../physics/collisionDetection.js";
 class Enemy extends Entity {
     constructor({ xPosition, yPosition, baseWidth, baseHeight, xSpeed, ySpeed, speed, health, attackDamage, canvas, fillColor }) {
         super({ xPosition, yPosition, baseWidth, baseHeight, xSpeed, ySpeed, speed, health, attackDamage, canvas })
-        this.fillColor = fillColor
+        this.fillColor = fillColor;
         this.hasBeenHit = false;
         this.hasBeenHitDuration = 300;
         this.toBeRemoved = false;
@@ -18,7 +18,7 @@ class Enemy extends Entity {
 
     changeDirection() {
         let randomDirection = Math.random() < 0.5 ? 1 : -1;
-        const isMovingHorizontal = this.speed.y === 0 ? true : false
+        const isMovingHorizontal = this.speed.y === 0 ? true : false;
         const atTopEdge = this.position.y <= 0;
         const atBottomEdge = this.position.y + this.dimensions.height >= this.canvas.baseDimensions.height;
         const atLeftEdge = this.position.x <= 0;
@@ -26,14 +26,14 @@ class Enemy extends Entity {
 
         if (isMovingHorizontal) {
             if (randomDirection < 0 && atTopEdge || randomDirection > 0 && atBottomEdge) {
-                randomDirection *= -1
+                randomDirection *= -1;
             }
-            this.speed = { x: 0, y: randomDirection * this.baseSpeed }
+            this.speed = { x: 0, y: randomDirection * this.baseSpeed };
         } else {
             if (randomDirection < 0 && atLeftEdge || randomDirection > 0 && atRightEdge) {
-                randomDirection *= -1
+                randomDirection *= -1;
             }
-            this.speed = { x: randomDirection * this.baseSpeed, y: 0 }
+            this.speed = { x: randomDirection * this.baseSpeed, y: 0 };
         }
     }
 
@@ -49,12 +49,12 @@ class Enemy extends Entity {
             this.changeDirection(this.canvas);
         }
         const { nextX, nextY } = this.calculateNextPosition(deltaTime);
-        this.position = { x: nextX, y: nextY }
+        this.position = { x: nextX, y: nextY };
     }
 
-    takeDamage(entity){
+    takeDamage(entity) {
         super.takeDamage(entity);
-        if(this.health <= 0){
+        if (this.health <= 0) {
             this.toBeRemoved = true;
         }
     }
@@ -65,11 +65,11 @@ class Enemy extends Entity {
 
     update(deltaTime) {
         if (!this.knockback.isActive) {
-            this.shouldChangeDirection(deltaTime)
+            this.shouldChangeDirection(deltaTime);
         } else {
-            super.update()
+            super.update();
         }
-        this.draw()
+        this.draw();
     }
 
     draw() {

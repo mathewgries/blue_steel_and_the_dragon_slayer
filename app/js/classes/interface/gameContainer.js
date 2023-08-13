@@ -37,8 +37,4 @@ export default class GameContainer {
     setMargins(viewHeight) {
         this.container.style.margin = `${(viewHeight / 2) - ((this.dimensions.height + (this.borderSize * 2)) / 2)}px auto`;
     }
-
-    update({ viewWidth, viewHeight }) {
-
-    }
 }

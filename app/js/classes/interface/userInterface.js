@@ -18,6 +18,4 @@ export default class UserInterface {
             diff: this.gameContainer.dimensions.width - this.canvas.dimensions.width
         });
     }
-
-    update() { }
 }

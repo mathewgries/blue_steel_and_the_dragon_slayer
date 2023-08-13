@@ -1,7 +1,7 @@
 // #region imports
-import Game from "./game.js"
+import Game from "./game.js";
 import UserInterface from "../classes/interface/UserInterface.js";
-import GameContainer from "../classes/interface/GameContainer.js"
+import GameContainer from "../classes/interface/GameContainer.js";
 import Canvas from "../classes/interface/canvas.js";
 import HudContainer from "../classes/interface/hudContainer/hudContainer.js";
 import Player from "../classes/entities/player.js";
@@ -30,13 +30,13 @@ const userInterface = new UserInterface({
 
 // #region Initialize core class elements
 const keys = {};
-const inventory = new Inventory({canvas})
+const inventory = new Inventory({canvas});
 const player = new Player({
     ...entityData.player,
     xPosition: canvas.baseDimensions.width / 2,
     yPosition: canvas.baseDimensions.height / 2,
     canvas
-})
+});
 const game = new Game({ 
     userInterface, 
     canvas, 

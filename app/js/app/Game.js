@@ -22,10 +22,6 @@ export default class Game {
 
     render() { }
 
-    updateInterface() {
-        this.userInterface.update();
-    }
-
     updateCanvas() {
         this.canvas.update();
     }
@@ -44,7 +40,7 @@ export default class Game {
 
     updateEquippedWeapon() {
         this.equippedWeapon = this.inventory.equippedWeapon;
-        const weapon = this.equippedWeapon
+        const weapon = this.equippedWeapon;
         const startPoint = {
             x: this.player.position.x + this.player.dimensions.width / 2,
             y: this.player.position.y + this.player.dimensions.height / 2
@@ -72,23 +68,23 @@ export default class Game {
     }
 
     updateEnemies() {
-        const player = this.player
-        const weapon = this.equippedWeapon
-        const playerProjectiles = this.playerProjectiles
+        const player = this.player;
+        const weapon = this.equippedWeapon;
+        const playerProjectiles = this.playerProjectiles;
 
         for (const enemy of this.enemies) {
-            enemy.update(this.deltaTime)
+            enemy.update(this.deltaTime);
 
             if (checkAABBCollision(player.bounds, enemy.bounds)) {
-                player.takeDamage(enemy)
-                player.handleCollisionWithEntity(enemy)
+                player.takeDamage(enemy);
+                player.handleCollisionWithEntity(enemy);
             }
 
             if (playerProjectiles.length > 0) {
                 for (const projectile of playerProjectiles) {
                     if (checkAABBCollision(projectile.bounds, enemy.bounds)) {
-                        enemy.takeDamage(projectile)
-                        enemy.handleCollisionWithEntity(projectile)
+                        enemy.takeDamage(projectile);
+                        enemy.handleCollisionWithEntity(projectile);
                         projectile.toBeRemoved = true;
                     }
                 }
@@ -96,19 +92,18 @@ export default class Game {
 
             if (weapon.weaponClass === 'melee') {
                 if (weapon.isAttack) {
-                    weapon.handleAttackEnemy(enemy)
+                    weapon.handleAttackEnemy(enemy);
                 }
             }
         }
     }
 
     updateEntityLists() {
-        this.playerProjectiles = this.playerProjectiles.filter((projectile) => !projectile.toBeRemoved)
-        this.enemies = this.enemies.filter((enemy) => !enemy.toBeRemoved)
+        this.playerProjectiles = this.playerProjectiles.filter((projectile) => !projectile.toBeRemoved);
+        this.enemies = this.enemies.filter((enemy) => !enemy.toBeRemoved);
     }
 
     update() {
-        this.updateInterface();
         this.updateCanvas();
         this.updatePlayer();
         this.updateInventory();
@@ -116,6 +111,6 @@ export default class Game {
         this.updatePlayerProjectiles();
         this.updateEnemies();
 
-        this.updateEntityLists()
+        this.updateEntityLists();
     }
 }

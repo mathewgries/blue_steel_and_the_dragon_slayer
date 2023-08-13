@@ -162,9 +162,11 @@ body {
     height: 80%;
 }
 
-.weapon-count-container {
+.weapon-count-container,
+.potion-count-container,
+.material-count-container {
     width: 100%;
-    height: 25%;
+    height: 20%;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -216,7 +218,8 @@ body {
     height: 100%;
 }
 
-.potion-label {
+.potion-label-container,
+.material-label-container {
     text-align: center;
     width: 100%;
     height: 12%;
@@ -262,10 +265,4 @@ body {
 .material-image {
     width: 100%;
     height: 100%;
-}
-
-.material-label-container {
-    text-align: center;
-    width: 100%;
-    height: 12%;
 }

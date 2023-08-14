@@ -3,23 +3,18 @@ export default class StatusMeter {
         this.container = document.createElement('div');
         this.container.setAttribute('id', `${labelText.toLowerCase()}-status-container`);
         this.container.classList.add('status-meter-container');
-
         this.label = document.createElement('div');
         this.label.classList.add('status-meter-label');
         this.label.innerText = labelText;
-
         this.meterWrapper = document.createElement('div');
         this.meterWrapper.classList.add('status-meter-wrapper');
-
         this.meter = document.createElement('div');
         this.meter.classList.add('status-meter');
         this.meter.setAttribute('id', `${labelText.toLowerCase()}-status-meter`);
-
         this.meterFill = document.createElement('div');
         this.meterFill.classList.add('status-meter-fill');
         this.meterFill.setAttribute('id', `${labelText.toLowerCase()}-meter-fill`);
         this.meterFill.style.backgroundColor = 'lightgreen';
-
         this.container.appendChild(this.label);
         this.container.appendChild(this.meterWrapper);
         this.meterWrapper.appendChild(this.meter);

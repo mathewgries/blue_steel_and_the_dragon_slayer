@@ -1,4 +1,4 @@
-import StatusBur from "./statusBar/statusBar.js";
+import StatusContainer from "./statusBar/statusContainer.js";
 import WeaponSelector from "./weaponSelector/weaponSelector.js";
 import SecondaryWeaponSelector from "./secondaryWeaponSelector/secondaryWeaponSelector.js";
 import PotionSelector from "./potionSelector/potionSelector.js";
@@ -15,7 +15,7 @@ export default class HudContainer {
             height: Math.floor(height - this.heightOffset)
         };
         this.aspectRatio = this.dimensions.width / this.dimensions.height;
-        this.statusBar = new StatusBur();
+        this.statusBar = new StatusContainer();
         this.weaponSelector = new WeaponSelector();
         this.secondaryWeaponSelector = new SecondaryWeaponSelector();
         this.potionSelector = new PotionSelector({ ...this.dimensions });
@@ -42,6 +42,7 @@ export default class HudContainer {
 
     resizeDependents() {
         this.statusBar.resize();
+        this.weaponSelector.resize();
         this.secondaryWeaponSelector.resize();
         this.potionSelector.resize();
         this.materialContainer.resize();

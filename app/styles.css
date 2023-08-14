@@ -82,7 +82,7 @@ body {
 /* WEAPON SELECTOR */
 #weapon-selector-container {
     width: 100%;
-    height: 30%;
+    height: 20%;
     border-top: 1px solid whitesmoke;
 }
 
@@ -92,8 +92,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* background-color: lightyellow;
-    color: black; */
 }
 
 #weapon-list-container {
@@ -162,23 +160,21 @@ body {
 /* WEAPON SELECTOR */
 #secondary-weapon-selector-container {
     width: 100%;
-    height: 18%;
+    height: 15%;
     border-top: 1px solid whitesmoke;
 }
 
 #secondary-weapon-label-container {
     width: 100%;
-    height: 15%;
+    height: 12.5%;
     display: flex;
     justify-content: center;
     align-items: center;
-    /* background-color: lightyellow;
-    color: black; */
 }
 
 #secondary-weapon-list-container {
     width: 100%;
-    height: 85%;
+    height: 87.5%;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -212,23 +208,21 @@ body {
 /* POTION SELECTOR */
 #potion-selector-container {
     width: 100%;
-    height: 18%;
+    height: 15%;
     border-top: 1px solid whitesmoke;
 }
 
 #potion-label-container {
     width: 100%;
-    height: 15%;
+    height: 12.5%;
     display: flex;
     justify-content: center;
     align-items: center;
-    /* background-color: lightyellow;
-    color: black; */
 }
 
 #potion-list-container {
     width: 100%;
-    height: 85%;
+    height: 87.5%;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -278,23 +272,21 @@ body {
 /* MATERIALS CONTAINER */
 #material-container {
     width: 100%;
-    height: 18%;
+    height: calc(35% - 4px);
     border-top: 1px solid whitesmoke;
 }
 
 #material-label-container {
     width: 100%;
-    height: 15%;
+    height: 6%;
     display: flex;
     justify-content: center;
     align-items: center;
-    /* background-color: lightyellow;
-    color: black; */
 }
 
 #material-list-container {
     width: 100%;
-    height: 85%;
+    height: 94%;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -303,11 +295,11 @@ body {
 
 .material-slot {
     flex: 0 0 calc(25%);
-    height: 80%;
     box-sizing: border-box;
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 30%;
 }
 
 .material-slot-display {
@@ -327,7 +319,6 @@ body {
     width: 70%;
     height: 90%;
     margin: 0 auto;
-    /* background-color: orange; */
 }
 
 .material-image {

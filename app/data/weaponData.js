@@ -1,5 +1,5 @@
 export const weaponData = {
-    "sling": [
+    sling: [
         {
             weaponClass: 'ranged',
             type: 'sling',
@@ -15,7 +15,7 @@ export const weaponData = {
             projectileType: 'rock',
         }
     ],
-    "sword": [
+    sword: [
         {
             weaponClass: 'melee',
             type: 'sword',
@@ -31,7 +31,7 @@ export const weaponData = {
             reach: 24,
         }
     ],
-    "bow": [
+    bow: [
         {
             weaponClass: 'ranged',
             type: 'bow',
@@ -47,8 +47,7 @@ export const weaponData = {
             projectileType: 'arrow',
         }
     ],
-    // "axe": [],
-    "flail": [
+    flail: [
         {
             weaponClass: 'melee',
             type: 'flail',
@@ -64,7 +63,7 @@ export const weaponData = {
             reach: 24,
         }
     ],
-    "crossbow": [
+    crossbow: [
         {
             weaponClass: 'ranged',
             type: 'crossbow',
@@ -80,7 +79,7 @@ export const weaponData = {
             projectileType: 'bolt',
         }
     ],
-    "polearm": [
+    polearm: [
         {
             weaponClass: 'melee',
             type: 'polearm',
@@ -95,7 +94,7 @@ export const weaponData = {
             reach: 24,
         }
     ],
-    "mace": [
+    mace: [
         {
             weaponClass: 'melee',
             type: 'mace',
@@ -111,7 +110,7 @@ export const weaponData = {
             reach: 24,
         }
     ],
-    "warhammer": [
+    warhammer: [
         {
             weaponClass: 'melee',
             type: 'warhammer',

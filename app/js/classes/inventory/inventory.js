@@ -98,6 +98,21 @@ export default class Inventory {
         addDurabilityContainerUI({ weapon });
     }
 
+    handleSecondaryWeaponSelection({ keys }) {
+        if (keys["e"]) {
+            this.equipSecondaryWeapon({ type: 'shovel' });
+        }
+        if (keys["r"]) {
+            this.equipSecondaryWeapon({ type: 'bomb' });
+        }
+        if (keys["t"]) {
+            this.equipSecondaryWeapon({ type: 'grapple' });
+        }
+        if (keys["y"]) {
+            this.equipSecondaryWeapon({ type: 'item4' });
+        }
+    }
+
     equipSecondaryWeapon({ type }) {
         const newWeapon = this.secondaryWeapons[type];
         if (newWeapon) {
@@ -155,5 +170,6 @@ export default class Inventory {
 
     update({ keys }) {
         this.handleWeaponSelection({ keys });
+        this.handleSecondaryWeaponSelection({ keys });
     }
 }

@@ -1,6 +1,5 @@
 export function addWeaponSlotUI({ weapon }) {
     const slot = document.getElementById(`${weapon.type}-slot-display`);
-    slot.style.backgroundColor = '#443355';
     const imgContainer = document.createElement('div');
     imgContainer.setAttribute('id', `${weapon.type}-image-container`);
     imgContainer.classList.add('weapon-image-container');

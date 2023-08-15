@@ -59,10 +59,6 @@ class Enemy extends Entity {
         }
     }
 
-    //*************************************************
-    // UPDATE AND DRAW
-    //*************************************************
-
     update(deltaTime) {
         if (!this.knockback.isActive) {
             this.shouldChangeDirection(deltaTime);
@@ -82,12 +78,6 @@ class Enemy extends Entity {
         );
     }
 }
-
-{/************************************************************************************************* 
-    
-                        ENEMIES
-
-**************************************************************************************************/}
 
 class Zombie extends Enemy {
     constructor({ xPosition, yPosition, baseWidth, baseHeight, xSpeed, ySpeed, speed, health, canvas, attackDamage, fillColor }) {

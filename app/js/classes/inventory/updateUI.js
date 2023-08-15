@@ -47,7 +47,8 @@ export function updateActiveWeaponUI({ currentType, newType }) {
     if (currentType) {
         document.getElementById(`${currentType}-slot-display`).classList.remove('equipped-weapon');
     }
-    document.getElementById(`${newType}-slot-display`).classList.add('equipped-weapon');
+    document
+        .getElementById(`${newType}-slot-display`).classList.add('equipped-weapon');
 }
 
 export function centerImageToSLotUI({ weapon }) {
@@ -56,4 +57,16 @@ export function centerImageToSLotUI({ weapon }) {
     const slotHeight = slot.offsetHeight;
     const containerHeight = imgContainer.offsetHeight;
     imgContainer.style.marginTop = `${((slotHeight / 2) - (containerHeight / 2)) / 2}px`;
+}
+
+export function updatePotionCountUI(potion, count) {
+    document.getElementById(`${potion}-potion-count`).innerText = count;
+}
+
+export function updateMaterialCountUI(material, count) {
+    document.getElementById(`${material}-count`).innerText = count;
+}
+
+export function updateBombCountUI(count) {
+    document.getElementById('bomb-count-container').innerText = count;
 }

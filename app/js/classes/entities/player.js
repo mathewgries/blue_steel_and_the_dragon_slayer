@@ -1,8 +1,9 @@
 import Entity from "./entity.js";
 
 export default class Player extends Entity {
-    constructor({ xPosition, yPosition, baseWidth, baseHeight, xSpeed, ySpeed, speed, health, attackDamage, stamina, canvas }) {
+    constructor({ xPosition, yPosition, baseWidth, baseHeight, xSpeed, ySpeed, speed, health, attackDamage, stamina, inventory, canvas }) {
         super({ xPosition, yPosition, baseWidth, baseHeight, xSpeed, ySpeed, speed, health, attackDamage, canvas })
+        this.inventory = inventory;
         this.icon = new Image();
         this.icon.src = '../../assets/images/player/kikk-sample.png';
         this.stamina = stamina;
@@ -35,6 +36,11 @@ export default class Player extends Entity {
         };
     }
 
+    increaseHealth(amount) {
+        super.increaseHealth(amount);
+        this.updateHealthMeter();
+    }
+
     takeDamage(entity) {
         super.takeDamage(entity);
         this.updateHealthMeter();
@@ -51,6 +57,14 @@ export default class Player extends Entity {
         } else {
             meterFill.style.backgroundColor = 'lightgreen';
         }
+    }
+
+    increaseStamina(amount) {
+        this.stamina = Math.min(this.stamina + amount, this.maxStamina);
+        if (this.staminaRefillPaused) {
+            this.staminaRefillPaused = false;
+        }
+        this.updateStaminaMeter();
     }
 
     depleteStamina(staminaCost) {
@@ -83,7 +97,6 @@ export default class Player extends Entity {
             meterFill.style.width = '0';
             meterFill.style.backgroundColor = 'transparent';
         }
-
     }
 
     staminaRefillTimer() {

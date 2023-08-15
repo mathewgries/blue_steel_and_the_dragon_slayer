@@ -4,7 +4,16 @@ import Bomb from '../secondaryWeapons/bomb.js';
 import Grapple from '../secondaryWeapons/grapple.js';
 import Shovel from '../secondaryWeapons/shovel.js';
 import { weaponData } from '../../../data/weaponData.js';
-import { addWeaponSlotUI, addDurabilityContainerUI, addWeaponCountUI, updateActiveWeaponUI, centerImageToSLotUI } from './updateUI.js';
+import {
+    addWeaponSlotUI,
+    addDurabilityContainerUI,
+    addWeaponCountUI,
+    updateActiveWeaponUI,
+    centerImageToSLotUI,
+    updatePotionCountUI,
+    updateMaterialCountUI,
+    updateBombCountUI
+} from './updateUI.js';
 import { secondaryWeaponData } from '../../../data/secondaryWeaponData.js';
 
 export default class Inventory {
@@ -16,7 +25,8 @@ export default class Inventory {
         this.secondaryWeapons = {}
         this.equippedSecondary = {};
         this.bombs = 0;
-        this.potions = { health: 0, damage: 0, defense: 0, stamina: 0, };
+        this.maxBombs = 4;
+        this.potions = { health: 0, damage: 0, defense: 0, stamina: 0 };
         this.equippedPotion = null;
         this.materials = { wood: 0, iron: 0, stone: 0, steel: 0, copper: 0, carbon: 0 };
 
@@ -30,52 +40,22 @@ export default class Inventory {
         this.addWeapon({ ...weaponData['warhammer'].find((x) => x.name === 'wooden_warhammer') });
 
         this.addSecondaryWeapon({ ...secondaryWeaponData['shovel'] });
-        this.addSecondaryWeapon({ ...secondaryWeaponData['bomb'] });
-        this.addSecondaryWeapon({ ...secondaryWeaponData['grapple'] });
+        // this.addSecondaryWeapon({ ...secondaryWeaponData['bomb'] });
+        // this.addSecondaryWeapon({ ...secondaryWeaponData['grapple'] });
 
         this.equipWeapon({ type: 'sling' });
         this.equipSecondaryWeapon({ type: 'shovel' });
     }
 
     handleWeaponSelection({ keys }) {
-        if (keys["1"]) {
-            this.equipWeapon({ type: 'sling' });
-        }
-        if (keys["2"]) {
-            if (this.weapons['sword']) {
-                this.equipWeapon({ type: 'sword' });
-            }
-        }
-        if (keys["3"]) {
-            if (this.weapons['bow']) {
-                this.equipWeapon({ type: 'bow' });
-            }
-        }
-        if (keys["4"]) {
-            if (this.weapons['flail']) {
-                this.equipWeapon({ type: 'flail' });
-            }
-        }
-        if (keys["5"]) {
-            if (this.weapons['crossbow']) {
-                this.equipWeapon({ type: 'crossbow' });
-            }
-        }
-        if (keys["6"]) {
-            if (this.weapons['polearm']) {
-                this.equipWeapon({ type: 'polearm' });
-            }
-        }
-        if (keys["7"]) {
-            if (this.weapons['mace']) {
-                this.equipWeapon({ tyep: 'mace' });
-            }
-        }
-        if (keys["8"]) {
-            if (this.weapons['warhammer']) {
-                this.equipWeapon({ type: 'warhammer' });
-            }
-        }
+        if (keys["1"]) this.equipWeapon({ type: 'sling' });
+        if (keys["2"]) this.equipWeapon({ type: 'sword' });
+        if (keys["3"]) this.equipWeapon({ type: 'bow' });
+        if (keys["4"]) this.equipWeapon({ type: 'flail' });
+        if (keys["5"]) this.equipWeapon({ type: 'crossbow' });
+        if (keys["6"]) this.equipWeapon({ type: 'polearm' });
+        if (keys["7"]) this.equipWeapon({ tyep: 'mace' });
+        if (keys["8"]) this.equipWeapon({ type: 'warhammer' });
     }
 
     equipWeapon({ type }) {
@@ -99,18 +79,10 @@ export default class Inventory {
     }
 
     handleSecondaryWeaponSelection({ keys }) {
-        if (keys["e"]) {
-            this.equipSecondaryWeapon({ type: 'shovel' });
-        }
-        if (keys["r"]) {
-            this.equipSecondaryWeapon({ type: 'bomb' });
-        }
-        if (keys["t"]) {
-            this.equipSecondaryWeapon({ type: 'grapple' });
-        }
-        if (keys["y"]) {
-            this.equipSecondaryWeapon({ type: 'item4' });
-        }
+        if (keys["e"]) this.equipSecondaryWeapon({ type: 'shovel' });
+        if (keys["r"]) this.equipSecondaryWeapon({ type: 'bomb' });
+        if (keys["t"]) this.equipSecondaryWeapon({ type: 'grapple' });
+        if (keys["y"]) this.equipSecondaryWeapon({ type: 'item4' });
     }
 
     equipSecondaryWeapon({ type }) {
@@ -166,6 +138,24 @@ export default class Inventory {
         if (weapon.type === 'warhammer') {
             this.weapons[type] = new Warmhammer({ ...weapon, canvas: this.canvas });
         }
+    }
+
+    addBomb() {
+        if (!this.secondaryWeapons['bomb']) {
+            this.addSecondaryWeapon({ ...secondaryWeaponData['bomb'] });
+        }
+        this.bombs = Math.min(this.bombs + 4, this.maxBombs);
+        updateBombCountUI(this.bombs);
+    }
+
+    addPotion(potion) {
+        this.potions[potion] += 1;
+        updatePotionCountUI(potion, this.potions[potion]);
+    }
+
+    addMaterial(material) {
+        this.materials[material] += 1;
+        updateMaterialCountUI(material, this.materials[material]);
     }
 
     update({ keys }) {

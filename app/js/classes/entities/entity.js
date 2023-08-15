@@ -101,8 +101,12 @@ export default class Entity {
         }
     }
 
+    increaseHealth(amount) {
+        this.health = Math.min(this.health + amount, this.maxHealth);
+    }
+
     takeDamage(entity) {
-        this.health = this.health - entity.attackDamage
+        this.health = this.health - entity.attackDamage;
     }
 
     update() {

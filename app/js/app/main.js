@@ -33,6 +33,7 @@ const keys = {};
 const inventory = new Inventory({canvas});
 const player = new Player({
     ...entityData.player,
+    inventory,
     xPosition: canvas.baseDimensions.width / 2,
     yPosition: canvas.baseDimensions.height / 2,
     canvas
@@ -58,7 +59,7 @@ const update = () => {
     game.update();
     game.render();
     requestAnimationFrame(update);
-}
+};
 
 function startGame() {
     update();

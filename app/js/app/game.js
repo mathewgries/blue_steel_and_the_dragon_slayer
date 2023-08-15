@@ -1,5 +1,7 @@
 import { Zombie } from "../classes/entities/enemy.js";
+import { ApplyItem, StorageItem } from "../classes/dropItems/dropItem.js";
 import { entityData } from "../../data/entityData.js";
+import { dropItemData } from "../../data/dropItemData.js";
 import { checkAABBCollision } from "../physics/collisionDetection.js";
 
 export default class Game {
@@ -9,11 +11,28 @@ export default class Game {
         this.player = player;
         this.inventory = inventory;
         this.equippedWeapon = inventory.equippedWeapon;
-        this.playerProjectiles = [];
         this.deltaTime = 1 / 60;
         this.keys = keys;
+
         this.enemies = [];
+        this.playerProjectiles = [];
+        this.dropItems = [];
+
         this.enemies.push(new Zombie({ ...entityData.zombie, canvas: this.canvas }));
+
+        this.dropItems.push(new StorageItem({
+            ...dropItemData['bomb'],
+            canvas: this.canvas,
+            xPosition: 100,
+            yPosition: 100,
+        }));
+
+        this.dropItems.push(new StorageItem({
+            ...dropItemData['bomb'],
+            canvas: this.canvas,
+            xPosition: 150,
+            yPosition: 150,
+        }));
     }
 
     resize({ viewWidth, viewHeight }) {
@@ -108,9 +127,22 @@ export default class Game {
         }
     }
 
+    updateDropItems() {
+        const items = this.dropItems;
+        const player = this.player;
+
+        for (const item of items) {
+            item.update(player);
+            if (item.isPickedUp) {
+                item.applyEffect(player);
+            }
+        }
+    }
+
     updateEntityLists() {
         this.playerProjectiles = this.playerProjectiles.filter((projectile) => !projectile.toBeRemoved);
         this.enemies = this.enemies.filter((enemy) => !enemy.toBeRemoved);
+        this.dropItems = this.dropItems.filter((item) => !item.toBeRemoved);
     }
 
     update() {
@@ -120,6 +152,7 @@ export default class Game {
         this.updateEquippedWeapon();
         this.updatePlayerProjectiles();
         this.updateEnemies();
+        this.updateDropItems();
 
         this.updateEntityLists();
     }

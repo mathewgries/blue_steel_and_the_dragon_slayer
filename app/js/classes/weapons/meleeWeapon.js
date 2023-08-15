@@ -34,7 +34,7 @@ class MeleeWeapon extends Weapon {
         setTimeout(() => {
             this.isAttack = false;
             this.useStamina = true;
-        }, this.duration)
+        }, this.duration);
     }
 
     update({ startPoint, keys, direction, stamina }) {
@@ -97,4 +97,4 @@ class Warmhammer extends MeleeWeapon {
 }
 // #endregion
 
-export { MeleeWeapon, Sword, Flail, Axe, Polearm, Mace, Warmhammer }
+export { MeleeWeapon, Sword, Flail, Axe, Polearm, Mace, Warmhammer };

@@ -1,24 +1,45 @@
 export default class StatusMeter {
     constructor({ labelText }) {
-        this.container = document.createElement('div');
-        this.container.setAttribute('id', `${labelText.toLowerCase()}-status-container`);
-        this.container.classList.add('status-meter-container');
-        this.label = document.createElement('div');
-        this.label.classList.add('status-meter-label');
-        this.label.innerText = labelText;
-        this.meterWrapper = document.createElement('div');
-        this.meterWrapper.classList.add('status-meter-wrapper');
-        this.meter = document.createElement('div');
-        this.meter.classList.add('status-meter');
-        this.meter.setAttribute('id', `${labelText.toLowerCase()}-status-meter`);
-        this.meterFill = document.createElement('div');
-        this.meterFill.classList.add('status-meter-fill');
-        this.meterFill.setAttribute('id', `${labelText.toLowerCase()}-meter-fill`);
-        this.meterFill.style.backgroundColor = 'lightgreen';
+        this.container = this.buildContainer({ text: labelText });
+        this.label = this.buildLabel({ text: labelText });
+        this.meterWrapper = this.buildMeterWrapper({ text: labelText });
+        this.meter = this.buildMeter({ text: labelText });
+
         this.container.appendChild(this.label);
         this.container.appendChild(this.meterWrapper);
         this.meterWrapper.appendChild(this.meter);
-        this.meter.appendChild(this.meterFill);
+    }
+
+    buildContainer({ text }) {
+        const container = document.createElement('div');
+        container.setAttribute('id', `${text.toLowerCase()}-status-container`);
+        container.classList.add('status-meter-container');
+        return container;
+    }
+
+    buildLabel({ text }) {
+        const label = document.createElement('div');
+        label.classList.add('status-meter-label');
+        label.innerText = text;
+        return label;
+    }
+
+    buildMeterWrapper({ text }) {
+        const meterWrapper = document.createElement('div');
+        meterWrapper.classList.add('status-meter-wrapper');
+        return meterWrapper;
+    }
+
+    buildMeter({ text }) {
+        const meter = document.createElement('div');
+        meter.classList.add('status-meter');
+        meter.setAttribute('id', `${text.toLowerCase()}-status-meter`);
+        const meterFill = document.createElement('div');
+        meterFill.classList.add('status-meter-fill');
+        meterFill.setAttribute('id', `${text.toLowerCase()}-meter-fill`);
+        meterFill.style.backgroundColor = 'lightgreen';
+        meter.appendChild(meterFill);
+        return meter;
     }
 
     resize() {
@@ -26,17 +47,5 @@ export default class StatusMeter {
         this.meterWrapperHeight = this.meterWrapper.offsetHeight;
         this.meterHeight = this.meter.offsetHeight;
         this.meter.style.marginTop = `${(this.meterWrapperHeight / 2) - (this.meterHeight / 2)}px`;
-    }
-
-    updateMeterFill({ value, maxValue }) {
-        const percentage = (value / maxValue) * 100;
-        this.meterFill.style.width = `${percentage}%`;
-        if (percentage < 25) {
-            this.meterFill.style.backgroundColor = 'red';
-        } else if (percentage < 50) {
-            this.meterFill.style.backgroundColor = 'orange';
-        } else {
-            this.meterFill.style.backgroundColor = 'lightgreen';
-        }
     }
 }

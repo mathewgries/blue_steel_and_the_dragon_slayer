@@ -3,17 +3,32 @@ import { weaponData } from "../../../../../data/weaponData.js";
 
 export default class WeaponSelector {
     constructor() {
-        this.container = document.getElementById('weapon-selector-container');
-        this.labelContainer = document.createElement('div');
-        this.labelContainer.setAttribute('id', 'weapon-label-container');
-        this.label = document.createElement('p');
-        this.label.innerText = 'Weapons';
-        this.weaponListContainer = document.createElement('div');
-        this.weaponListContainer.setAttribute('id', 'weapon-list-container');
-        this.labelContainer.appendChild(this.label);
+        this.container = this.buildContainer();
+        this.labelContainer = this.buildLabelContainer();
+        this.weaponListContainer = this.buildListContainer();
+
         this.container.appendChild(this.labelContainer);
         this.container.appendChild(this.weaponListContainer);
         this.weaponSlots = this.buildWeaponSlots();
+    }
+
+    buildContainer(){
+        return document.getElementById('weapon-selector-container');
+    }
+
+    buildLabelContainer(){
+        const labelContainer = document.createElement('div');
+        labelContainer.setAttribute('id', 'weapon-label-container');
+        const label = document.createElement('p');
+        label.innerText = 'Weapons';
+        labelContainer.appendChild(label);
+        return labelContainer;
+    }
+
+    buildListContainer(){
+        const listContainer = document.createElement('div');
+        listContainer.setAttribute('id', 'weapon-list-container');
+        return listContainer;
     }
 
     buildWeaponSlots() {

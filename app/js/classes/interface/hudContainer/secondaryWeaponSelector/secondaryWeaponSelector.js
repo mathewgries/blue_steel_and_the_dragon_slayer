@@ -3,17 +3,31 @@ import { secondaryWeaponData } from "../../../../../data/secondaryWeaponData.js"
 
 export default class SecondaryWeaponSelector {
     constructor() {
-        this.container = document.getElementById('secondary-weapon-selector-container');
-        this.labelContainer = document.createElement('div');
-        this.labelContainer.setAttribute('id', 'secondary-weapon-label-container');
-        this.label = document.createElement('p');
-        this.label.innerText = 'Secondary';
-        this.weaponListContainer = document.createElement('div');
-        this.weaponListContainer.setAttribute('id', 'secondary-weapon-list-container');
-        this.labelContainer.appendChild(this.label);
+        this.container = this.buildContainer();
+        this.labelContainer = this.buildLabel();
+        this.weaponListContainer = this.buildListContainer();
         this.container.appendChild(this.labelContainer);
         this.container.appendChild(this.weaponListContainer);
         this.weaponSlots = this.buildWeaponSlots();
+    }
+
+    buildContainer(){
+        return document.getElementById('secondary-weapon-selector-container');
+    }
+
+    buildLabel(){
+        const labelContainer = document.createElement('div');
+        labelContainer.setAttribute('id', 'secondary-weapon-label-container');
+        const label = document.createElement('p');
+        label.innerText = 'Secondary';
+        labelContainer.appendChild(label);
+        return labelContainer;
+    }
+
+    buildListContainer(){
+        const listContainer = document.createElement('div');
+        listContainer.setAttribute('id', 'secondary-weapon-list-container');
+        return listContainer;
     }
 
     buildWeaponSlots() {

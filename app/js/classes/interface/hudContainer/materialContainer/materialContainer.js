@@ -3,17 +3,31 @@ import { materialData } from "../../../../../data/materialData.js";
 
 export default class MaterialContainer {
     constructor() {
-        this.container = document.getElementById('material-container');
-        this.labelContainer = document.createElement('div');
-        this.labelContainer.setAttribute('id', 'material-label-container');
-        this.label = document.createElement('p');
-        this.label.innerText = 'Materials';
-        this.materialListContainer = document.createElement('div');
-        this.materialListContainer.setAttribute('id', 'material-list-container');
-        this.labelContainer.appendChild(this.label);
+        this.container = this.buildContainer();
+        this.labelContainer = this.builLabeldContainer();
+        this.materialListContainer = this.buildListContainer();
         this.container.appendChild(this.labelContainer);
         this.container.appendChild(this.materialListContainer);
         this.materialSlots = this.buildMaterialSlots();
+    }
+
+    buildContainer(){
+        return document.getElementById('material-container');
+    }
+
+    builLabeldContainer(){
+        const labelContainer = document.createElement('div');
+        labelContainer.setAttribute('id', 'material-label-container');
+        const label = document.createElement('p');
+        label.innerText = 'Materials';
+        labelContainer.appendChild(label);
+        return labelContainer;
+    }
+
+    buildListContainer(){
+        const materialListContainer = document.createElement('div');
+        materialListContainer.setAttribute('id', 'material-list-container');
+        return materialListContainer;
     }
 
     buildMaterialSlots() {

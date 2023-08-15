@@ -21,7 +21,7 @@ export default class Game {
         this.enemies.push(new Zombie({ ...entityData.zombie, canvas: this.canvas }));
 
         this.dropItems.push(new StorageItem({
-            ...dropItemData['bomb'],
+            ...dropItemData['stone'],
             canvas: this.canvas,
             xPosition: 100,
             yPosition: 100,

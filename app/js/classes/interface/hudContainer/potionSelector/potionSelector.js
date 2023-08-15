@@ -3,17 +3,31 @@ import { potionData } from "../../../../../data/potionData.js";
 
 export default class PotionSelector {
     constructor() {
-        this.container = document.getElementById('potion-selector-container');
-        this.labelContainer = document.createElement('div');
-        this.labelContainer.setAttribute('id', 'potion-label-container');
-        this.label = document.createElement('p');
-        this.label.innerText = 'Potions';
-        this.potionListContainer = document.createElement('div');
-        this.potionListContainer.setAttribute('id', 'potion-list-container');
-        this.labelContainer.appendChild(this.label);
+        this.container = this.buildContainer();
+        this.labelContainer = this.buildLabelContainer();
+        this.potionListContainer = this.buildListContainer()
         this.container.appendChild(this.labelContainer);
         this.container.appendChild(this.potionListContainer);
         this.potionSlots = this.buildPotionSlots();
+    }
+
+    buildContainer() {
+        return document.getElementById('potion-selector-container');
+    }
+
+    buildLabelContainer() {
+        const labelContainer = document.createElement('div');
+        labelContainer.setAttribute('id', 'potion-label-container');
+        const label = document.createElement('p');
+        label.innerText = 'Potions';
+        labelContainer.appendChild(label);
+        return labelContainer;
+    }
+
+    buildListContainer() {
+        const listContainer = document.createElement('div');
+        listContainer.setAttribute('id', 'potion-list-container');
+        return listContainer;
     }
 
     buildPotionSlots() {

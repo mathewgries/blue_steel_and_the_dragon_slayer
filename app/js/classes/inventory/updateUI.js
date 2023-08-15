@@ -59,14 +59,14 @@ export function centerImageToSLotUI({ weapon }) {
     imgContainer.style.marginTop = `${((slotHeight / 2) - (containerHeight / 2)) / 2}px`;
 }
 
-export function updatePotionCountUI(potion, count) {
+export function updatePotionCountUI({ potion, count }) {
     document.getElementById(`${potion}-potion-count`).innerText = count;
 }
 
-export function updateMaterialCountUI(material, count) {
+export function updateMaterialCountUI({ material, count }) {
     document.getElementById(`${material}-count`).innerText = count;
 }
 
-export function updateBombCountUI(count) {
+export function updateBombCountUI({ count }) {
     document.getElementById('bomb-count-container').innerText = count;
 }

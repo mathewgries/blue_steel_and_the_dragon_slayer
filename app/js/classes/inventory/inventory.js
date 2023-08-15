@@ -47,6 +47,22 @@ export default class Inventory {
         this.equipSecondaryWeapon({ type: 'shovel' });
     }
 
+    //===========================================================================================
+    //                                  MAIN WEAPONS
+    //===========================================================================================
+
+    addWeapon({ weaponClass, type, name }) {
+        const weapon = weaponData[type].find((x) => x.name === name);
+        if (weaponClass === 'ranged') {
+            this.initalizeRangedWeapon({ weapon, type });
+        }
+        if (weaponClass === 'melee') {
+            this.initalizeMeleeWeapon({ weapon, type });
+        }
+        addWeaponSlotUI({ weapon });
+        addDurabilityContainerUI({ weapon });
+    }
+
     handleWeaponSelection({ keys }) {
         if (keys["1"]) this.equipWeapon({ type: 'sling' });
         if (keys["2"]) this.equipWeapon({ type: 'sword' });
@@ -63,50 +79,6 @@ export default class Inventory {
         if (newWeapon) {
             updateActiveWeaponUI({ currentType: this.equippedWeapon.type, newType: newWeapon.type });
             this.equippedWeapon = newWeapon;
-        }
-    }
-
-    addWeapon({ weaponClass, type, name }) {
-        const weapon = weaponData[type].find((x) => x.name === name);
-        if (weaponClass === 'ranged') {
-            this.initalizeRangedWeapon({ weapon, type });
-        }
-        if (weaponClass === 'melee') {
-            this.initalizeMeleeWeapon({ weapon, type });
-        }
-        addWeaponSlotUI({ weapon });
-        addDurabilityContainerUI({ weapon });
-    }
-
-    handleSecondaryWeaponSelection({ keys }) {
-        if (keys["e"]) this.equipSecondaryWeapon({ type: 'shovel' });
-        if (keys["r"]) this.equipSecondaryWeapon({ type: 'bomb' });
-        if (keys["t"]) this.equipSecondaryWeapon({ type: 'grapple' });
-        if (keys["y"]) this.equipSecondaryWeapon({ type: 'item4' });
-    }
-
-    equipSecondaryWeapon({ type }) {
-        const newWeapon = this.secondaryWeapons[type];
-        if (newWeapon) {
-            updateActiveWeaponUI({ currentType: this.equippedSecondary.type, newType: newWeapon.type });
-            this.equippedSecondary = newWeapon;
-        }
-    }
-
-    addSecondaryWeapon({ type }) {
-        const weapon = secondaryWeaponData[type];
-        addWeaponSlotUI({ weapon });
-        if (type === 'bomb') {
-            this.secondaryWeapons[type] = new Bomb({ ...weapon, canvas: this.canvas });
-            addWeaponCountUI({ weapon, count: this.bombs });
-        }
-        if (type === 'grapple') {
-            this.secondaryWeapons[type] = new Grapple({ ...weapon, canvas: this.canvas });
-            centerImageToSLotUI({ weapon });
-        }
-        if (type === 'shovel') {
-            this.secondaryWeapons[type] = new Shovel({ ...weapon, canvas: this.canvas });
-            centerImageToSLotUI({ weapon });
         }
     }
 
@@ -140,23 +112,78 @@ export default class Inventory {
         }
     }
 
+    //===========================================================================================
+    //                                  SECONDARY WEAPONS
+    //===========================================================================================
+
+    handleSecondaryWeaponSelection({ keys }) {
+        if (keys["e"]) this.equipSecondaryWeapon({ type: 'shovel' });
+        if (keys["r"]) this.equipSecondaryWeapon({ type: 'bomb' });
+        if (keys["t"]) this.equipSecondaryWeapon({ type: 'grapple' });
+        if (keys["y"]) this.equipSecondaryWeapon({ type: 'item4' });
+    }
+
+    equipSecondaryWeapon({ type }) {
+        const newWeapon = this.secondaryWeapons[type];
+        if (newWeapon) {
+            updateActiveWeaponUI({ currentType: this.equippedSecondary.type, newType: newWeapon.type });
+            this.equippedSecondary = newWeapon;
+        }
+    }
+
+    addSecondaryWeapon({ type }) {
+        const weapon = secondaryWeaponData[type];
+        addWeaponSlotUI({ weapon });
+        if (type === 'bomb') {
+            this.secondaryWeapons[type] = new Bomb({ ...weapon, canvas: this.canvas });
+            addWeaponCountUI({ weapon, count: this.bombs });
+        }
+        if (type === 'grapple') {
+            this.secondaryWeapons[type] = new Grapple({ ...weapon, canvas: this.canvas });
+            centerImageToSLotUI({ weapon });
+        }
+        if (type === 'shovel') {
+            this.secondaryWeapons[type] = new Shovel({ ...weapon, canvas: this.canvas });
+            centerImageToSLotUI({ weapon });
+        }
+    }
+
     addBomb() {
         if (!this.secondaryWeapons['bomb']) {
             this.addSecondaryWeapon({ ...secondaryWeaponData['bomb'] });
         }
         this.bombs = Math.min(this.bombs + 4, this.maxBombs);
-        updateBombCountUI(this.bombs);
+        updateBombCountUI({ count: this.bombs });
     }
 
-    addPotion(potion) {
+    //===========================================================================================
+    //                                  POTIONS
+    //===========================================================================================
+
+    usePotion({ potion }) {
+        if (this.potions[potion] > 0) {
+            this.potions[potion] -= 1
+            updatePotionCountUI({ potion, count: this.potions[potion] });
+        }
+    }
+
+    addPotion({ potion }) {
         this.potions[potion] += 1;
-        updatePotionCountUI(potion, this.potions[potion]);
+        updatePotionCountUI({ potion, count: this.potions[potion] });
     }
 
-    addMaterial(material) {
+    //===========================================================================================
+    //                                  MATERIALS
+    //===========================================================================================
+
+    addMaterial({ material }) {
         this.materials[material] += 1;
-        updateMaterialCountUI(material, this.materials[material]);
+        updateMaterialCountUI({ material, count: this.materials[material] });
     }
+
+    //===========================================================================================
+    //                                  UPDATE
+    //===========================================================================================
 
     update({ keys }) {
         this.handleWeaponSelection({ keys });

@@ -52,8 +52,8 @@ class Enemy extends Entity {
         this.position = { x: nextX, y: nextY };
     }
 
-    takeDamage(entity) {
-        super.takeDamage(entity);
+    takeDamage({ entity }) {
+        super.takeDamage({ entity });
         if (this.health <= 0) {
             this.toBeRemoved = true;
         }

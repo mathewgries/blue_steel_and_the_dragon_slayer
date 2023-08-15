@@ -22,15 +22,15 @@ export default class Weapon {
         this.isBroken = false;
     }
 
-    normalizeDirectionVector(xDirection, yDirection) {
-        let x = xDirection;
-        let y = yDirection;
+    normalizeDirectionVector({ x, y }) {
+        let xDirection = x;
+        let yDirection = y;
         const length = Math.sqrt(x * x + y * y);
         if (length !== 0) {
-            x /= length;
-            y /= length;
+            xDirection /= length;
+            yDirection /= length;
         }
-        return { x, y };
+        return { x: xDirection, y: yDirection };
     }
 
     updateCoordinates({ startPoint, direction }) {

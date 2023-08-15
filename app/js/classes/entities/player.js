@@ -12,10 +12,21 @@ export default class Player extends Entity {
         this.staminaRefillSpeed = 100;
         this.staminaRefillPaused = false;
         this.isAttackKeyPressed = false;
+        this.potionStates = {
+            health: { actionKey: 'u', state: false },
+            damage: { actionKey: 'i', state: false },
+            defense: { actionKey: 'o', state: false },
+            stamina: { actionKey: 'p', state: false },
+        };
+
         setInterval(() => this.staminaRefillTimer(), this.staminaRefillSpeed);
     }
 
-    handleNormalMovement(keys, playerMovement) {
+    //===========================================================================================
+    //                                  MOVEMENT
+    //===========================================================================================
+
+    handleNormalMovement({ keys, playerMovement }) {
         this.direction = { x: 0, y: 0 };
         if (keys['w']) {
             this.direction = { x: this.direction.x, y: this.direction.y - 1 };
@@ -29,20 +40,27 @@ export default class Player extends Entity {
         if (keys['d']) {
             this.direction = { x: this.direction.x + 1, y: this.direction.y };
         }
-        this.direction = this.normalizeDirectionVector(this.direction.x, this.direction.y);
+        this.direction = this.normalizeDirectionVector({ x: this.direction.x, y: this.direction.y });
         this.position = {
             x: this.position.x + this.direction.x * playerMovement,
             y: this.position.y + this.direction.y * playerMovement,
         };
     }
 
-    increaseHealth(amount) {
-        super.increaseHealth(amount);
+    //===========================================================================================
+    //                                  HEALTH
+    //===========================================================================================
+
+    increaseHealth({ amount }) {
+        if(this.health === this.maxHealth){
+            return;
+        }
+        super.increaseHealth({ amount });
         this.updateHealthMeter();
     }
 
-    takeDamage(entity) {
-        super.takeDamage(entity);
+    takeDamage({ entity }) {
+        super.takeDamage({ entity });
         this.updateHealthMeter();
     }
 
@@ -59,7 +77,11 @@ export default class Player extends Entity {
         }
     }
 
-    increaseStamina(amount) {
+    //===========================================================================================
+    //                                  STAMINA
+    //===========================================================================================
+
+    increaseStamina({ amount }) {
         this.stamina = Math.min(this.stamina + amount, this.maxStamina);
         if (this.staminaRefillPaused) {
             this.staminaRefillPaused = false;
@@ -67,8 +89,8 @@ export default class Player extends Entity {
         this.updateStaminaMeter();
     }
 
-    depleteStamina(staminaCost) {
-        this.stamina -= staminaCost;
+    depleteStamina({ amount }) {
+        this.stamina -= amount;
         this.updateStaminaMeter();
 
         if (this.stamina <= 0) {
@@ -106,11 +128,54 @@ export default class Player extends Entity {
         }
     }
 
+    //===========================================================================================
+    //                                  POTIONS
+    //===========================================================================================
+
+    handleUsePotion({ keys }) {
+        for (const potion of Object.keys(this.potionStates)) {
+            const actionKey = this.potionStates[potion].actionKey;
+            if (keys[actionKey] && !this.potionStates[potion].state) {
+                if (this.validateUsePotion({ potion })) {
+                    this.potionStates[potion].state = true;
+                    this.inventory.usePotion({ potion });
+                }
+            }
+        }
+    }
+
+    validateUsePotion({ potion }) {
+        if (potion === 'health' && this.health < this.maxHealth) {
+            this.increaseHealth({ amount: (this.maxHealth / 4) });
+            return true;
+        }
+        if (potion === 'stamina' && this.stamina < this.maxStamina) {
+            this.increaseStamina({ amount: (this.maxStamina / 4) })
+            return true;
+        }
+    }
+
+    releasePotion({ keys }) {
+        for (const potion of Object.keys(this.potionStates)) {
+            const actionKey = this.potionStates[potion].actionKey;
+            if (!keys[actionKey] && this.potionStates[potion].state) {
+                this.potionStates[potion].state = false;
+            }
+        }
+    }
+
+    //===========================================================================================
+    //                                  CANVAS UPDATE
+    //===========================================================================================
+
+
     update({ keys, deltaTime }) {
         const playerMovement = this.baseSpeed * deltaTime;
         if (!this.knockback.isActive) {
-            this.handleNormalMovement(keys, playerMovement);
+            this.handleNormalMovement({ keys, playerMovement });
         }
+        this.handleUsePotion({ keys });
+        this.releasePotion({ keys });
         super.update();
         this.draw();
     }

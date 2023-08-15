@@ -23,15 +23,15 @@ export default class Entity {
         };
     }
 
-    normalizeDirectionVector(xDirection, yDirection) {
-        let x = xDirection;
-        let y = yDirection;
-        const length = Math.sqrt(x * x + y * y);
+    normalizeDirectionVector({ x, y }) {
+        let xDirection = x;
+        let yDirection = y;
+        const length = Math.sqrt(xDirection * xDirection + yDirection * yDirection);
         if (length !== 0) {
-            x /= length;
-            y /= length;
+            xDirection /= length;
+            yDirection /= length;
         }
-        return { x, y };
+        return { x: xDirection, y: yDirection };
     }
 
     get bounds() {
@@ -66,7 +66,7 @@ export default class Entity {
         }, this.knockback.duration);
     }
 
-    handleCollisionWithEntity(entity) {
+    handleCollisionWithEntity({ entity }) {
         if (this.knockback.isActive) { return; }
         const thisX = this.position.x + this.dimensions.width / 2;
         const thisY = this.position.y + this.dimensions.height / 2;
@@ -75,11 +75,11 @@ export default class Entity {
         const deltaX = thisX - entityX;
         const deltaY = thisY - entityY;
 
-        this.knockback.direction = this.normalizeDirectionVector(deltaX, deltaY);
+        this.knockback.direction = this.normalizeDirectionVector({ x: deltaX, y: deltaY });
         this.startKnockback();
     }
 
-    handleCollisionWithWeapon(weapon) {
+    handleCollisionWithWeapon({ weapon }) {
         if (this.knockback.isActive) { return; }
         const thisX = this.position.x + this.dimensions.width / 2;
         const thisY = this.position.y + this.dimensions.height / 2;
@@ -88,7 +88,7 @@ export default class Entity {
         const deltaX = thisX - weaponX;
         const deltaY = thisY - weaponY;
 
-        this.knockback.direction = this.normalizeDirectionVector(deltaX, deltaY);
+        this.knockback.direction = this.normalizeDirectionVector({ x: deltaX, y: deltaY });
         this.startKnockback();
     }
 
@@ -101,11 +101,14 @@ export default class Entity {
         }
     }
 
-    increaseHealth(amount) {
+    increaseHealth({ amount }) {
+        if (this.health === this.maxHealth) { 
+            return 
+        }
         this.health = Math.min(this.health + amount, this.maxHealth);
     }
 
-    takeDamage(entity) {
+    takeDamage({ entity }) {
         this.health = this.health - entity.attackDamage;
     }
 

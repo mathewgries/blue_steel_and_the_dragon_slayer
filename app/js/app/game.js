@@ -21,14 +21,14 @@ export default class Game {
         this.enemies.push(new Zombie({ ...entityData.zombie, canvas: this.canvas }));
 
         this.dropItems.push(new StorageItem({
-            ...dropItemData['stone'],
+            ...dropItemData['health'],
             canvas: this.canvas,
             xPosition: 100,
             yPosition: 100,
         }));
 
         this.dropItems.push(new StorageItem({
-            ...dropItemData['bomb'],
+            ...dropItemData['health'],
             canvas: this.canvas,
             xPosition: 150,
             yPosition: 150,
@@ -77,7 +77,7 @@ export default class Game {
         if (weapon.weaponClass === 'ranged') {
             if (weapon.isAttack) {
                 playerProjectiles.push(weapon.createProjectile());
-                player.depleteStamina(weapon.staminaCost);
+                player.depleteStamina({ amount: weapon.staminaCost });
                 weapon.isAttack = false;
             }
         }
@@ -100,15 +100,15 @@ export default class Game {
             enemy.update(this.deltaTime);
 
             if (checkAABBCollision(player.bounds, enemy.bounds)) {
-                player.takeDamage(enemy);
-                player.handleCollisionWithEntity(enemy);
+                player.takeDamage({ entity: enemy });
+                player.handleCollisionWithEntity({ entity: enemy });
             }
 
             if (playerProjectiles.length > 0) {
                 for (const projectile of playerProjectiles) {
                     if (checkAABBCollision(projectile.bounds, enemy.bounds)) {
-                        enemy.takeDamage(projectile);
-                        enemy.handleCollisionWithEntity(projectile);
+                        enemy.takeDamage({ entity: projectile });
+                        enemy.handleCollisionWithEntity({ entity: projectile });
                         projectile.toBeRemoved = true;
                     }
                 }
@@ -116,9 +116,9 @@ export default class Game {
 
             if (weapon.weaponClass === 'melee') {
                 if (weapon.isAttack) {
-                    weapon.handleAttackEnemy(enemy);
+                    weapon.handleAttackEnemy({ entity: enemy });
                     if (weapon.useStamina) {
-                        player.depleteStamina(weapon.staminaCost);
+                        player.depleteStamina({ amount: weapon.staminaCost });
                         weapon.useStamina = false;
                     }
 
@@ -132,9 +132,9 @@ export default class Game {
         const player = this.player;
 
         for (const item of items) {
-            item.update(player);
+            item.update({ player });
             if (item.isPickedUp) {
-                item.applyEffect(player);
+                item.applyEffect({ player });
             }
         }
     }

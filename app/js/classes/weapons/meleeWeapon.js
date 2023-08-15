@@ -10,15 +10,15 @@ class MeleeWeapon extends Weapon {
         this.attackPoint = null;
     }
 
-    handleAttackEnemy(enemy) {
+    handleAttackEnemy({ entity }) {
         if (
-            this.attackPoint.x >= enemy.position.x &&
-            this.attackPoint.x <= enemy.position.x + enemy.dimensions.width &&
-            this.attackPoint.y >= enemy.position.y &&
-            this.attackPoint.y <= enemy.position.y + enemy.dimensions.height
+            this.attackPoint.x >= entity.position.x &&
+            this.attackPoint.x <= entity.position.x + entity.dimensions.width &&
+            this.attackPoint.y >= entity.position.y &&
+            this.attackPoint.y <= entity.position.y + entity.dimensions.height
         ) {
-            enemy.takeDamage(this);
-            enemy.handleCollisionWithWeapon(this);
+            enemy.takeDamage({ entity: this });
+            enemy.handleCollisionWithWeapon({ entity: this });
         }
     }
 

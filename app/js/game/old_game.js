@@ -73,7 +73,7 @@ function update(timestamp) {
     for (const enemy of enemies) {
         enemy.update(deltaTime, ctx, canvas);
         if (checkAABBCollision(player.bounds, enemy.bounds)) {
-            player.takeDamage(enemy);
+            player.takeDamage({ entity: enemy });
         }
         // if (player.getIsAttacking()) {
         //     player.attackEnemy(enemy);

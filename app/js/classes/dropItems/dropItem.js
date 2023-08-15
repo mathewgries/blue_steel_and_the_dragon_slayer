@@ -13,7 +13,7 @@ class DropItem {
         this.toBeRemoved = false;
     }
 
-    checkPickUp(player) {
+    checkPickUp({ player }) {
         if (
             this.position.x < player.position.x + player.dimensions.width &&
             this.position.x + player.dimensions.width > player.position.x &&
@@ -25,8 +25,8 @@ class DropItem {
         }
     }
 
-    update(player) {
-        this.checkPickUp(player);
+    update({ player }) {
+        this.checkPickUp({ player });
         this.draw();
     }
 
@@ -47,7 +47,7 @@ class ApplyItem extends DropItem {
         this.amount = amount;
     }
 
-    applyEffect(player) {
+    applyEffect({ player }) {
         let amount = 0;
         if (this.type === 'health') {
             if (this.name === 'full_hoagie') {
@@ -56,7 +56,7 @@ class ApplyItem extends DropItem {
             if (this.name === 'half_hoagie') {
                 amount = (player.maxHealth / 4);
             }
-            player.increaseHealth(amount);
+            player.increaseHealth({ amount });
         }
         if (this.type === 'stamina') {
             if (this.name === 'large_chip') {
@@ -65,7 +65,7 @@ class ApplyItem extends DropItem {
             if (this.name === 'small_chip') {
                 amount += (player.maxStamina / 4);
             }
-            player.increaseStamina(amount);
+            player.increaseStamina({ amount });
         }
     }
 }
@@ -76,13 +76,13 @@ class StorageItem extends DropItem {
         this.category = category;
     }
 
-    applyEffect(player) {
+    applyEffect({ player }) {
         const inventory = player.inventory;
         if (this.category === 'potion') {
-            inventory.addPotion(this.type);
+            inventory.addPotion({ potion: this.type });
         }
         if (this.category === 'material') {
-            inventory.addMaterial(this.type);
+            inventory.addMaterial({ material: this.type });
         }
         if (this.category === 'bomb') {
             inventory.addBomb();
